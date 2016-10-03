@@ -1,0 +1,41 @@
+{
+  "name": "animorph",
+  "version": "0.0.1",
+  "description": "Morph your dom with style",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "watch": "rollup -c rollup.config.js -w",
+    "test": "semistandard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudiobmgrtnr/animorph.git"
+  },
+  "keywords": [
+    "js",
+    "animation",
+    "css3",
+    "dom"
+  ],
+  "author": "Claudio Baumgartner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/claudiobmgrtnr/animorph/issues"
+  },
+  "homepage": "https://github.com/claudiobmgrtnr/animorph#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-es2015-rollup": "^1.2.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "rollup": "^0.36.1",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-watch": "^2.5.0",
+    "semistandard": "^9.0.0"
+  },
+  "semistandard": {
+    "ignore": [
+      "/dist/**"
+    ]
+  }
+}
