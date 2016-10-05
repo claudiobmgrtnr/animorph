@@ -1,8 +1,10 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (factory((global.animorph = global.animorph || {})));
-}(this, (function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('jquery')) :
+  typeof define === 'function' && define.amd ? define(['jquery'], factory) :
+  (factory(global.jQuery));
+}(this, (function ($) { 'use strict';
+
+$ = 'default' in $ ? $['default'] : $;
 
 /**
  * Removes the given element from it's parent
@@ -652,14 +654,28 @@ function replaceClasses(element, classNamesBefore, classNamesAfter) {
   }, options));
 }
 
-exports.animorph = animorph;
-exports.appendTo = appendTo;
-exports.prependTo = prependTo;
-exports.remove = remove;
-exports.leave = leave;
-exports.insertAfter = insertAfter;
-exports.replaceClasses = replaceClasses;
+$.fn.amAppendTo = function (target, options) {
+  return appendTo(this.toArray(), $(target)[0], options);
+};
 
-Object.defineProperty(exports, '__esModule', { value: true });
+$.fn.amPrependTo = function (target, options) {
+  return prependTo(this.toArray(), $(target)[0], options);
+};
+
+$.fn.amRemove = function (options) {
+  return remove(this.toArray(), options);
+};
+
+$.fn.amLeave = function (options) {
+  return leave(this.toArray(), options);
+};
+
+$.fn.amInsertAfter = function (target, options) {
+  return insertAfter(this.toArray(), $(target)[0], options);
+};
+
+$.fn.amReplaceClasses = function (classNamesBefore, classNamesAfter, transitionName, options) {
+  return replaceClasses(this.toArray(), classNamesBefore, classNamesAfter, transitionName, options);
+};
 
 })));

@@ -1,0 +1,86 @@
+body {
+	margin: 0;
+	width: 100%;
+}
+
+body:after {
+	content: '';
+	display: table;
+	width: 100%;
+	clear: both;
+}
+
+ul {
+	list-style-type: none;
+	padding:0;
+}
+
+.controls {
+	clear: both;
+}
+
+.element {
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	padding: 8px;
+	list-style: none;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.element--golden {
+	background: goldenrod;
+}
+
+.element--green {
+	background: #bada55;
+}
+
+.element.am-leave {
+	visibility: hidden;
+}
+
+.element.am-leave-prepare {
+	visibility: hidden;
+}
+
+.element.am-leave-active {
+	height: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+
+.element.am-enter {
+	visibility: hidden;
+}
+
+.element.am-enter-prepare {
+}
+
+
+.element.am-enter-active {
+	height: 30px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+
+.element.am-enter-stagger,
+.element.am-move-stagger,
+.element.am-leave-stagger {
+	transition-delay: 0.2s;
+}
+
+.element.am-enter,
+.element.am-move,
+.element.am-leave {
+	transition: all 300ms;
+}

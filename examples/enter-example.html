@@ -1,0 +1,50 @@
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script src="../dist/jquery.js"></script>
+
+<style>
+  body {
+    margin: 0;
+  }
+
+  * {
+    font-family: Helvetica Neue, Helvetica, Arial;
+  }
+
+  ul {
+    list-style-type: none;
+    overflow: hidden;
+  }
+
+  li {
+    list-style: none;
+  }
+
+
+  .element.am-enter {
+    transition: all 10000ms;
+    transform: translateX(-100%);
+  }
+
+  .element.am-enter-active {
+    transform: translateX(0);
+  }
+
+</style>
+
+
+<h1>Demo Enter</h1>
+
+<div class="stage">
+  <button class="addElement">
+    Add Element
+  </button>
+  <ul class="container">
+
+  </ul>
+</div>
+
+<script>
+  $('.addElement').on('click', function () {
+    $('<li class="element">New Element</li>').amAppendTo('.container');
+  });
+</script>

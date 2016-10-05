@@ -1,0 +1,80 @@
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script src="../dist/jquery.js"></script>
+
+<style>
+  .element--hidden {
+    visibility: hidden;
+  }
+  .element.am-leave {
+    transition: all 300ms;
+  }
+  .element.am-leave-prepare {
+    transform: translateY(0);
+  }
+  .element.am-leave-active {
+    transform: translateY(-50px);
+  }
+
+  .element.am-leave-stagger {
+    transition-delay: 200ms;
+  }
+
+  .element.am-enter {
+    transition: all 300ms;
+    transition-delay: 2s;
+    transform: translateX(1000px);
+  }
+  .element.am-enter-prepare {
+  }
+  .element.am-enter-active {
+    transform: translateX(0px);
+  }
+
+  .element.am-enter-stagger {
+    transition-delay: 1s;
+  }
+
+  .wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 500px;
+    height: 500px;
+  }
+  .products {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+</style>
+
+
+<h1>Demo</h1>
+
+<ul class="target"></ul>
+
+<div class="wrapper">
+  <ul class="products">
+
+    <li class="element">Element 1</li>
+    <li class="element">Element 2</li>
+    <li class="element">Element 3</li>
+    <li class="element">Element 4</li>
+
+  </ul>
+</div>
+
+<script>
+  $(".products").on("click", function() {
+    // Prepare elements
+    var newElements = $();
+    ["New Element1", "New Element2"].map(function(text) {
+      newElements = newElements.add($("<li class='element'>" + text + "</li>"));
+    });
+    // Animate elements
+    $(".element", this).amLeave({ addClasses: 'element--hidden'}).then(function() {
+      $("ul:first").remove();
+    });
+    const newProducts = $("<ul class='products' />").appendTo(".wrapper")
+    $(newElements).amAppendTo(newProducts);
+  });
+</script>

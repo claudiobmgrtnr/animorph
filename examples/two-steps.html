@@ -1,5 +1,5 @@
 <script src="../dist/index.js"></script>
-<link rel="stylesheet" href="stylesheets/styles.css">
+<link rel="stylesheet" href="stylesheets/styles-two-steps.css">
 
 <h1>Demo</h1>
 
@@ -12,11 +12,7 @@
 </ul>
 
 <ul class="right">
-  <li class="js-element element element--green">Element 1</li>
-  <li class="js-element element element--green">Element 2</li>
-  <li class="js-element element element--green">Element 3</li>
-  <li class="js-element element element--green">Element 4</li>
-  <li class="js-element element element--green">Element 5</li>
+
 </ul>
 
 <div class="controls">
@@ -30,6 +26,18 @@
       animorph.appendTo(document.querySelectorAll(".left li"), document.querySelector('.right'), {
         addClasses: ['element--green'],
         removeClasses: ['element--golden']
+      }).then(function() {
+        var collection = [];
+        var li = document.createElement("li");
+        li.className = "js-element element element--green";
+        li.innerHTML = "Element";
+        for (var i = 0; i < 7; i++) {
+          var li = document.createElement("li");
+          li.className = "js-element element element--green";
+          li.innerHTML = "Element "+i;
+          collection[i] = li
+        }
+        animorph.appendTo(collection, document.querySelector('.left'));
       });
     }
   });
@@ -39,8 +47,6 @@
       animorph.prependTo(e.target, document.querySelector('.left'), {
         addClasses: ['element--golden'],
         removeClasses: ['element--green']
-      }).then(() => {
-        console.log('done :) ');
       });
     }
   });
