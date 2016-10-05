@@ -1,0 +1,42 @@
+
+
+body {
+	margin: 0;
+	width: 100%;
+}
+
+body:after {
+	content: '';
+	display: table;
+	width: 100%;
+	clear: both;
+}
+
+ul {
+	list-style-type: none;
+	padding:0;
+}
+
+.element {
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	padding: 8px;
+}
+
+.left {
+	float: left;
+}
+
+.left .element {
+	background: goldenrod;
+}
+
+
+.right {
+	float: right;
+}
+
+.right .element {
+	background: #bada55;
+}

@@ -1,7 +1,34 @@
 <script src="../dist/index.js"></script>
+<link rel="stylesheet" href="stylesheets/styles.css">
 
-<div id="demo">Morph me</div>
+<ul class="left">
+	<li class="js-element element">Element 1</li>
+	<li class="js-element element">Element 2</li>
+	<li class="js-element element">Element 3</li>
+	<li class="js-element element">Element 4</li>
+	<li class="js-element element">Element 5</li>
+</ul>
 
+<ul class="right">
+	<li class="js-element element">Element 1</li>
+	<li class="js-element element">Element 2</li>
+	<li class="js-element element">Element 3</li>
+	<li class="js-element element">Element 4</li>
+	<li class="js-element element">Element 5</li>
+</ul>
 <script>
-	animorph.appendTo(document.getElementById('demo'), document.body);
+	document.querySelector(".left").addEventListener("click",function(e) {
+		// e.target was the clicked element
+		console.log(e.target);
+		if (e.target && e.target.matches("li.js-element")) {
+			animorph.appendTo(e.target,document.querySelector('.right'))
+		}
+	});
+	document.querySelector(".right").addEventListener("click",function(e) {
+		// e.target was the clicked element
+		console.log(e.target);
+		if (e.target && e.target.matches("li.js-element")) {
+			animorph.prependTo(e.target,document.querySelector('.left'))
+		}
+	});
 </script>
