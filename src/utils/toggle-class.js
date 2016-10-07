@@ -51,5 +51,8 @@ export function removeClass(element, className) {
 }
 
 export function addClass(element, className) {
+	if (className === undefined) {
+		throw new Error('Class name is required');
+	}
 	return toggleClass(element, className, true);
 }

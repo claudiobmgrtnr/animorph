@@ -1,16 +1,16 @@
-import transitionEnd from './utils/feature-detects';
-import {addClass} from './utils/toggle-class';
-import {detachNode, prependNode} from './utils/dom-manipulation';
+/**
+ * Export all public methods of the internal Animorph class
+ */
+import Animorph from './utils/animorph';
+export default function AnimorphAPI(namespace) {
+	// Create new instance of the internal Animorph Class
+	const animorph = new Animorph(namespace);
 
-export function appendTo (itemToMorph, targetContainer) {
-	detachNode(itemToMorph);
-	addClass(itemToMorph, `${namespace}-enter`);
-	targetContainer.appendChild(itemToMorph);
-}
+	this.appendTo = function() {
+		animorph.appendTo(...arguments);
+	};
 
-
-export function prependTo (itemToMorph, targetContainer) {
-	detachNode(itemToMorph);
-	addClass(itemToMorph, `${namespace}-enter`);
-	prependNode(itemToMorph, targetContainer);
+	this.prependTo = function() {
+		animorph.prependTo(...arguments);
+	};
 }

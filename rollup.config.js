@@ -4,7 +4,7 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 export default {
   entry: 'src/index.js',
   format: 'umd',
-  moduleName: 'animorph',
+  moduleName: 'Animorph',
   plugins: [
     babel({
       presets: [ [ 'es2015', { modules: false } ], 'stage-0' ],

@@ -19,16 +19,22 @@
 
 const animationClassNames = [
 	'animate',
-	'enter',
-	'animate-active'
+	'enter', 
+	'move',
+	'leave',
+	'enter-prepare', //styles you want to apply to the enter object without transition
+	'move-prepare',  //styles you want to apply to the move object without transition
+	'leave-prepare', //styles you want to apply to the leave object without transition
+	'enter-active',
+	'move-active',
+	'leave-active'
 ];
 
 
 export function getNamespacedAnimationClasses(namespace) {
 	const classes = {};
 	animationClassNames.forEach((className) => {
-		const camelCasedName = className.replace(/\-(.)/g, (match, character) => character.toUpperCase());
-		classes[camelCasedName] = `${namespace}-${className}`;
+		classes[className] = `${namespace}-${className}`;
 	});
 	return classes;
 }
