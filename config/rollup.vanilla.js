@@ -1,17 +1,14 @@
 import babel from 'rollup-plugin-babel';
-import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
-  entry: 'src/index.js',
+  entry: 'src/vanilla.js',
   format: 'umd',
-  moduleName: 'Animorph',
+  moduleName: 'animorph',
   plugins: [
     babel({
       presets: [ [ 'es2015', { modules: false } ], 'stage-0' ],
       babelrc: false
-    }),
-    nodeResolve({})
+    })
   ],
-  sourceMap: true,
   dest: 'dist/index.js'
 };

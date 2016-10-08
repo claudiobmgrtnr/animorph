@@ -4,33 +4,53 @@
 <h1>Demo</h1>
 
 <ul class="left">
-	<li class="js-element element element--red">Element 1</li>
-	<li class="js-element element element--red">Element 2</li>
-	<li class="js-element element element--red">Element 3</li>
-	<li class="js-element element element--red">Element 4</li>
-	<li class="js-element element element--red">Element 5</li>
+  <li class="js-element element element--golden">Element 1</li>
+  <li class="js-element element element--golden">Element 2</li>
+  <li class="js-element element element--golden">Element 3</li>
+  <li class="js-element element element--golden">Element 4</li>
+  <li class="js-element element element--golden">Element 5</li>
 </ul>
 
 <ul class="right">
-	<li class="js-element element element--blue">Element 1</li>
-	<li class="js-element element element--blue">Element 2</li>
-	<li class="js-element element element--blue">Element 3</li>
-	<li class="js-element element element--blue">Element 4</li>
-	<li class="js-element element element--blue">Element 5</li>
+  <li class="js-element element element--green">Element 1</li>
+  <li class="js-element element element--green">Element 2</li>
+  <li class="js-element element element--green">Element 3</li>
+  <li class="js-element element element--green">Element 4</li>
+  <li class="js-element element element--green">Element 5</li>
 </ul>
+
+<div class="controls">
+  <a class="remove" href="javascript:;">Remove element</a>
+  <a class="add" href="javascript:;">Add element</a>
+</div>
 <script>
-	var animorph = new Animorph();
-	document.querySelector(".left").addEventListener("click",function(e) {
-		// e.target was the clicked element
-		if (e.target && e.target.matches("li.js-element")) {
-			animorph.appendTo(e.target,document.querySelector('.right'))
-		}
-	});
-	document.querySelector(".right").addEventListener("click",function(e) {
-		// e.target was the clicked element
-		if (e.target && e.target.matches("li.js-element")) {
-			animorph.prependTo(e.target,document.querySelector('.left'))
-		}
-	});
-	console.log(animorph);
+  document.querySelector(".left").addEventListener("click",function(e) {
+    // e.target was the clicked element
+    if (e.target && e.target.matches("li.js-element")) {
+      animorph.appendTo(e.target, document.querySelector('.right'), {
+        addClasses: ['element--green'],
+        removeClasses: ['element--golden']
+      });
+    }
+  });
+  document.querySelector(".right").addEventListener("click",function(e) {
+    // e.target was the clicked element
+    if (e.target && e.target.matches("li.js-element")) {
+      animorph.prependTo(e.target, document.querySelector('.left'), {
+        addClasses: ['element--golden'],
+        removeClasses: ['element--green']
+      });
+    }
+  });
+
+  document.querySelector(".remove").addEventListener("click",function(e) {
+    animorph.remove(document.querySelector("li.js-element"));
+  });
+
+  document.querySelector(".add").addEventListener("click",function(e) {
+    var li = document.createElement("li");
+    li.className = "js-element element element--green";
+    li.innerHTML = "Element"
+    animorph.prependTo(li, document.querySelector('.right'));
+  });
 </script>

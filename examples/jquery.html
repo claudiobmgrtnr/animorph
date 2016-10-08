@@ -1,0 +1,48 @@
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script src="../dist/jquery.js"></script>
+<link rel="stylesheet" href="stylesheets/styles.css">
+
+<h1>Demo</h1>
+
+<ul class="left">
+  <li class="js-element element element--golden">Element 1</li>
+  <li class="js-element element element--golden">Element 2</li>
+  <li class="js-element element element--golden">Element 3</li>
+  <li class="js-element element element--golden">Element 4</li>
+  <li class="js-element element element--golden">Element 5</li>
+</ul>
+
+<ul class="right">
+  <li class="js-element element element--green">Element 1</li>
+  <li class="js-element element element--green">Element 2</li>
+  <li class="js-element element element--green">Element 3</li>
+  <li class="js-element element element--green">Element 4</li>
+  <li class="js-element element element--green">Element 5</li>
+</ul>
+
+<div class="controls">
+  <a class="remove" href="javascript:;">Remove element</a>
+  <a class="add" href="javascript:;">Add element</a>
+</div>
+<script>
+  $(".left").on("click", "li.js-element", function(e) {
+    $(this).amAppendTo($('.right'), {
+      addClasses: ['element--green'],
+      removeClasses: ['element--golden']
+    });
+  });
+  $(".right").on("click", "li.js-element", function(e) {
+    $(this).amPrependTo($('.left'), {
+      addClasses: ['element--golden'],
+      removeClasses: ['element--green']
+    });
+  });
+
+  $(".remove").on("click", function(e) {
+    $("li.js-element:first").amRemove();
+  });
+
+  $(".add").on("click", function(e) {
+    $("<li class='js-element element element--green'>Element</li>").amPrependTo($('.right'));
+  });
+</script>
