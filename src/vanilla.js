@@ -38,7 +38,6 @@ export function animorph (element, {
   }
 
   const elements = element instanceof window.HTMLElement ? [element] : Array.prototype.slice.call(element);
-  console.log(elements);
   return Promise.all(elements.map((element, animationIndex) => {
     if (element instanceof window.HTMLElement === false) {
       throw new Error('Element is required');

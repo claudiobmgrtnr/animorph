@@ -391,7 +391,9 @@ function moveAnimation(_ref4) {
     animationIndex: animationIndex,
     animationName: 'move',
     onAnimationStart: function onAnimationStart() {
-      element.setAttribute('style', 'position: absolute; top: ' + top + '; left: ' + left + ';');
+      element.style.position = 'absolute';
+      element.style.left = left + 'px';
+      element.style.top = top + 'px';
     }
   });
 }
@@ -569,7 +571,6 @@ function animorph(element, _ref) {
   }
 
   var elements = element instanceof window.HTMLElement ? [element] : Array.prototype.slice.call(element);
-  console.log(elements);
   return Promise.all(elements.map(function (element, animationIndex) {
     if (element instanceof window.HTMLElement === false) {
       throw new Error('Element is required');

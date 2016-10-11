@@ -163,7 +163,9 @@ function moveAnimation ({
     animationIndex,
     animationName: 'move',
     onAnimationStart: () => {
-      element.setAttribute('style', `position: absolute; top: ${top}; left: ${left};`);
+      element.style.position = 'absolute';
+      element.style.left = `${left}px`;
+      element.style.top = `${top}px`;
     }
   });
 }
