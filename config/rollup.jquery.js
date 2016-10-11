@@ -16,5 +16,5 @@ export default {
   external: [
     'jquery'
   ],
-  dest: 'dist/jquery.js'
+  dest: 'dist/animorph.jquery.js'
 };

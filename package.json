@@ -1,8 +1,8 @@
 {
   "name": "animorph",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Morph your dom with style",
-  "main": "src/index.js",
+  "main": "src/vanilla.js",
   "scripts": {
     "build": "npm-run-all --parallel rollup:*",
     "rollup:min": "rollup -c config/rollup.min.js",

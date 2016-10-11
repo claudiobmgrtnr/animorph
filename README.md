@@ -11,6 +11,8 @@ Animorph.js is a small javascript framework that helps you to move any kind of e
 * jQuery bindings (optional)
 * CommonJS, AMD, and global interface
 
+Check it out on [codepen](http://codepen.io/claudiobmgrtnr/pen/NRrYaQ)
+
 Installation
 ------------
 Install the plugin with npm:

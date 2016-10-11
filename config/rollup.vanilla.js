@@ -10,5 +10,5 @@ export default {
       babelrc: false
     })
   ],
-  dest: 'dist/index.js'
+  dest: 'dist/animorph.js'
 };
