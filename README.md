@@ -1,5 +1,6 @@
-# Animorph
-===================
+Animorph
+=========
+
 [![npm version](https://badge.fury.io/js/animorph.svg)](http://badge.fury.io/js/animorph) [![Dependency Status](https://david-dm.org/claudiobmgrtnr/animorph.svg)](https://david-dm.org/claudiobmgrtnr/animorph) [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard) [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)]()
 
 Morph your dom with style.  
@@ -36,6 +37,8 @@ jQuery (please use `animorph.jquery.min.js` from the dist folder)
 ```js
   $('.foo').amAppendTo('.bar');
 ```
+
+Please take a look at [the very simple enter example](https://github.com/claudiobmgrtnr/animorph/blob/master/examples/enter-example.html) or at the slightly [more advanced example](https://github.com/claudiobmgrtnr/animorph/blob/master/examples/advanced-example.html)
 
 # Contribution
 
