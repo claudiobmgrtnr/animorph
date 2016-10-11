@@ -1,0 +1,175 @@
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script src="https://unpkg.com/animorph@0.0.1/dist/jquery.min.js"></script>
+
+<style>
+	body {
+		padding: 50px;
+		margin: 0;
+	}
+	* {
+		font-family: Helvetica Neue, Helvetica, Arial;
+	}
+	ul {
+		list-style-type: none;
+	}
+	li {
+		list-style: none;
+	}
+	.stage-title {
+		margin: 0;
+	}
+	.top {
+		min-height: 30px;
+	}
+	.interessts {
+		overflow: hidden;
+		padding: 0;
+	}
+	.stage:after {
+		content: '';
+		display: table;
+		width: 100%;
+		clear: both;
+	}
+
+	.stage-left {
+		float: left;
+		width: 50%;
+	}
+
+	.stage-right {
+		float: right;
+		width: 50%;
+	}
+	/*Base animation configurations*/
+	.am-leave,
+	.am-move,
+	.am-enter {
+		transition: all 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+	}
+	/*Title styling*/
+	.stage-title.am-leave-prepare {
+		visibility: hidden;
+	}
+	.stage-title.am-leave-active {
+		visibility: hidden;
+	}
+	.stage-title.stage-title--small,
+	.stage-title.am-enter-prepare {
+		font-size: 15px;
+	}
+	.stage-title.am-enter {
+		visibility: hidden;
+	}
+	.stage-title li {
+		display: inline;
+	}
+	/*Element styling*/
+	.element {
+		cursor: pointer;
+	}
+	.element.am-leave,
+	.element.am-move,
+	.element.am-enter {
+		transition-delay: 500ms;
+	}
+	.element.am-enter {
+		overflow: hidden;
+		visibility: hidden;
+	}
+	/*Selected element styling*/
+	.selected.am-leave-prepare {
+		visibility: hidden;
+	}
+	.selected.am-leave-active {
+		visibility: hidden;
+	}
+	.element--bold {
+		font-weight: bold;
+		font-size: 15px;
+	}
+	/*Not selected element styling*/
+	.sortOut.am-leave {
+		transition-delay: 0.7s;
+		opacity: 1;
+		transform: translateX(0);
+	}
+	.sortOut.am-leave-stagger {
+		transition-delay: 0.1s;
+	}
+	.sortOut.am-leave-active {
+		transform: translateX(500px);
+		opacity: 0;
+	}
+	/*New added element styling*/
+	.new-element {
+		transition: all 400ms;
+		transition-delay: .3s;
+		transform: translateY(0);
+		font-family: "Comic Sans MS", sans;
+	}
+	.new-element.am-enter {
+		transform: translateY(1000px);
+	}
+	.new-element.am-enter-stagger {
+		transition-delay: 0.2s;
+	}
+	.glasses {
+		z-index: 1;
+		transition: all 1200ms;
+		transition-delay: .3s;
+		transform: translateY(0);
+		font-family: "Comic Sans MS", sans;
+	}
+	.glasses.am-enter-prepare {
+	}
+	.glasses.am-enter {
+		transform: translateY(-1500px);
+	}
+	.glasses.am-enter-stagger {
+		transition-delay: 0.2s;
+	}
+</style>
+
+
+<h1>Animorph</h1>
+
+<a href="https://github.com/claudiobmgrtnr/animorph/">Github</a>
+
+<div class="stage">
+	<div class="stage-left">
+		<h2 class="stage-title">I'm interested in </h2>
+	</div>
+	<div class="stage-right">
+		<div class="top">
+		</div>
+		<ul class="interessts">
+			<li class="element">Football</li>
+			<li class="element">Baseball</li>
+			<li class="element">Basketball</li>
+			<li class="element">Ice hockey</li>
+		</ul>
+	</div>
+</div>
+
+<script>
+	$('.interessts').on('click', '.element', function () {
+		var elem = $(this);
+		var notClicked = elem.siblings();
+		notClicked.addClass('sortOut');
+		elem.addClass('selected');
+		$('.stage-title').amPrependTo('.top',{ addClasses: 'stage-title--small'});
+		notClicked.amRemove({ addClasses: 'element--hide'});
+		elem.amAppendTo('.top .stage-title', { addClasses: 'element--bold'});
+		var newElements = $();
+		["Such Wow", "Much Amaze", "<img style='position: relative' src='https://media.giphy.com/media/YOAJ0pILjWEus/giphy.gif'> <div style='position: absolute; top: 41px; left: 19px; width: 81px; height: 20px; transform: scale(-1, 1) rotate(-11deg);'class='glasses'></div>"].map(function(text) {
+			newElements = newElements.add($("<li class='new-element'>" + text + "</li>"));
+		});
+		$(newElements).amAppendTo($('.interessts'));
+		var glasses = $();
+		["<img style='max-height: 20px;' src='https://s3-us-west-1.amazonaws.com/xrl/talks/sdjs-deal-with-it/sunglasses.png'>"].map(function(text) {
+			glasses = glasses.add($("<li class='glasses'>" + text + "</li>"));
+		});
+		$(glasses).amAppendTo($('.glasses'));
+	});
+</script>
