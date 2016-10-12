@@ -5,6 +5,10 @@ import {
   removeAnimation
 } from './utils/animation';
 
+import {
+  isDomElement
+} from './utils/dom-manipulation';
+
 // Mapping of dom operation to animation
 const operations = {
   appendTo: morphAnimation,
@@ -36,10 +40,10 @@ export function animorph (element, {
   if (typeof removeClasses === 'string') {
     removeClasses = removeClasses.split(/\s*(?:\s|,)\s*/);
   }
-
-  const elements = element instanceof window.HTMLElement ? [element] : Array.prototype.slice.call(element);
+  // Turn element from a single element or a node list or an array to an array:
+  const elements = isDomElement(element) ? [element] : Array.prototype.slice.call(element);
   return Promise.all(elements.map((element, animationIndex) => {
-    if (element instanceof window.HTMLElement === false) {
+    if (!isDomElement(element)) {
       throw new Error('Element is required');
     }
     // If we can't use a move animation fallback to an enter animation

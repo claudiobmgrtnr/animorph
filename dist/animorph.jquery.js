@@ -6,6 +6,8 @@
 
 $ = 'default' in $ ? $['default'] : $;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /**
  * Removes the given element from it's parent
  *
@@ -220,15 +222,23 @@ function getTransitionDelay(node) {
  * @param node
  */
 function forceReflow(node) {
-  node.offsetHeight;
+  return new Promise(function (resolve) {
+    resolve(node.offsetHeight);
+  });
 }
 
-var requestAnimationFrame = window.requestAnimationFrame || setTimeout;
-
-function requestAnimationFramePromise() {
-  return new Promise(function (resolve) {
-    return requestAnimationFrame(resolve);
-  });
+/**
+ * Checks if node is a dom element
+ * @param node
+ * @returns {*}
+ */
+function isDomElement(node) {
+  // For all modern browser
+  if (window.HTMLElement) {
+    return node instanceof window.HTMLElement;
+  }
+  // For IE9 <3
+  return node && (typeof node === 'undefined' ? 'undefined' : _typeof(node)) === 'object' && node.nodeType === 1 && node.nodeName;
 }
 
 /**
@@ -480,7 +490,7 @@ function _startAnimation(_ref6) {
   return new Promise(function (resolve) {
     setTimeout(resolve, staggeringDuration);
   }).then(function () {
-    return requestAnimationFramePromise().then(function () {
+    return forceReflow(element).then(function () {
       forceReflow(element);
       removeClass(element, namespace + '-' + animationName + '-prepare');
       addClass(element, namespace + '-' + animationName + '-active');
@@ -510,7 +520,7 @@ function _removeAnimationClasses(_ref7) {
   var namespace = _ref7.namespace;
 
   disableTransitions(element);
-  return requestAnimationFramePromise().then(function () {
+  return forceReflow(element).then(function () {
     removeClass(element, namespace + '-animate');
     removeClass(element, namespace + '-' + animationName);
     removeClass(element, namespace + '-' + animationName + '-active');
@@ -569,10 +579,10 @@ function animorph(element, _ref) {
   if (typeof removeClasses === 'string') {
     removeClasses = removeClasses.split(/\s*(?:\s|,)\s*/);
   }
-
-  var elements = element instanceof window.HTMLElement ? [element] : Array.prototype.slice.call(element);
+  // Turn element from a single element or a node list or an array to an array:
+  var elements = isDomElement(element) ? [element] : Array.prototype.slice.call(element);
   return Promise.all(elements.map(function (element, animationIndex) {
-    if (element instanceof window.HTMLElement === false) {
+    if (!isDomElement(element)) {
       throw new Error('Element is required');
     }
     // If we can't use a move animation fallback to an enter animation

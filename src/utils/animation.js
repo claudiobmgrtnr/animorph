@@ -1,5 +1,4 @@
 import { addClass, removeClass, detachNode, attachNode, cloneNode, waitUntilTransitionEnd, enableTransitions, disableTransitions, getTransitionDelay, forceReflow } from './dom-manipulation';
-import { requestAnimationFramePromise } from './request-animation-frame';
 
 /**
  * An animation which adds the `enter` classes and adds the element to the dom
@@ -248,7 +247,7 @@ function _startAnimation ({
   addClass(element, `${namespace}-animate`);
   return new Promise((resolve) => {
     setTimeout(resolve, staggeringDuration);
-  }).then(() => requestAnimationFramePromise().then(() => {
+  }).then(() => forceReflow(element).then(() => {
     forceReflow(element);
     removeClass(element, `${namespace}-${animationName}-prepare`);
     addClass(element, `${namespace}-${animationName}-active`);
@@ -269,7 +268,7 @@ function _getElementPosition (node) {
 
 function _removeAnimationClasses ({element, animationName, namespace}) {
   disableTransitions(element);
-  return requestAnimationFramePromise()
+  return forceReflow(element)
   .then(() => {
     removeClass(element, `${namespace}-animate`);
     removeClass(element, `${namespace}-${animationName}`);

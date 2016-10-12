@@ -217,5 +217,21 @@ export function getTransitionDelay (node) {
  * @param node
  */
 export function forceReflow (node) {
-  node.offsetHeight;
+  return new Promise((resolve) => {
+    resolve(node.offsetHeight)
+  });
+}
+
+/**
+ * Checks if node is a dom element
+ * @param node
+ * @returns {*}
+ */
+export function isDomElement(node) {
+  // For all modern browser
+  if (window.HTMLElement) {
+    return node instanceof window.HTMLElement;
+  }
+  // For IE9 <3
+  return node && typeof node === 'object' && node.nodeType === 1 && node.nodeName;
 }
