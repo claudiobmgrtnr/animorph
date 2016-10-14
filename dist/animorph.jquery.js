@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('jquery')) :
-  typeof define === 'function' && define.amd ? define(['jquery'], factory) :
-  (factory(global.jQuery));
-}(this, (function ($) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
+  (factory((global.animorph = global.animorph || {}),global.jQuery));
+}(this, (function (exports,$) { 'use strict';
 
 $ = 'default' in $ ? $['default'] : $;
 
@@ -688,5 +688,15 @@ $.fn.amInsertAfter = function (target, options) {
 $.fn.amReplaceClasses = function (classNamesBefore, classNamesAfter, transitionName, options) {
   return replaceClasses(this.toArray(), classNamesBefore, classNamesAfter, transitionName, options);
 };
+
+exports.animorph = animorph;
+exports.appendTo = appendTo;
+exports.prependTo = prependTo;
+exports.remove = remove;
+exports.leave = leave;
+exports.insertAfter = insertAfter;
+exports.replaceClasses = replaceClasses;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 })));

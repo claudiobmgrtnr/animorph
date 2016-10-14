@@ -24,3 +24,5 @@ $.fn.amInsertAfter = function (target, options) {
 $.fn.amReplaceClasses = function (classNamesBefore, classNamesAfter, transitionName, options) {
   return replaceClasses(this.toArray(), classNamesBefore, classNamesAfter, transitionName, options);
 };
+
+export * from './vanilla.js';

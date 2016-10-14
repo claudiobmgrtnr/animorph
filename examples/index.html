@@ -1,4 +1,5 @@
-<script src="../dist/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.js"></script>
+<script src="../dist/animorph.js"></script>
 <link rel="stylesheet" href="stylesheets/styles.css">
 
 <h1>Demo</h1>
@@ -24,10 +25,25 @@
   <a class="add" href="javascript:;">Add element</a>
 </div>
 <script>
+  if (!Element.prototype.matches) {
+    Element.prototype.matches =
+        Element.prototype.matchesSelector ||
+        Element.prototype.mozMatchesSelector ||
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.oMatchesSelector ||
+        Element.prototype.webkitMatchesSelector ||
+        function(s) {
+          var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+              i = matches.length;
+          while (--i >= 0 && matches.item(i) !== this) {}
+          return i > -1;
+        };
+  }
+
   document.querySelector(".left").addEventListener("click",function(e) {
     // e.target was the clicked element
     if (e.target && e.target.matches("li.js-element")) {
-      animorph.appendTo(document.querySelectorAll(".left li"), document.querySelector('.right'), {
+      animorph.appendTo(document.querySelector(".left li"), document.querySelector('.right'), {
         addClasses: ['element--green'],
         removeClasses: ['element--golden']
       });
@@ -39,7 +55,7 @@
       animorph.prependTo(e.target, document.querySelector('.left'), {
         addClasses: ['element--golden'],
         removeClasses: ['element--green']
-      }).then(() => {
+      }).then (function() {
         console.log('done :) ');
       });
     }
@@ -52,7 +68,7 @@
   document.querySelector(".add").addEventListener("click",function(e) {
     var li = document.createElement("li");
     li.className = "js-element element element--green";
-    li.innerHTML = "Element"
+    li.innerHTML = "Element";
     animorph.prependTo(li, document.querySelector('.right'));
   });
 </script>

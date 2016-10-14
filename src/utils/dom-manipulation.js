@@ -218,7 +218,7 @@ export function getTransitionDelay (node) {
  */
 export function forceReflow (node) {
   return new Promise((resolve) => {
-    resolve(node.offsetHeight)
+    resolve(node.offsetHeight);
   });
 }
 
@@ -227,7 +227,7 @@ export function forceReflow (node) {
  * @param node
  * @returns {*}
  */
-export function isDomElement(node) {
+export function isDomElement (node) {
   // For all modern browser
   if (window.HTMLElement) {
     return node instanceof window.HTMLElement;
