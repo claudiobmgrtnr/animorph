@@ -326,11 +326,18 @@ function morphAnimation(_ref3) {
   // Create clones which are needed for the morph effect
   var leavePlaceholder = _createLeavePlaceholder(element);
   var movePlaceholder = _createMovePlaceholder(element, morphParent);
+
+  addClasses.forEach(function (className) {
+    return addClass(element, className);
+  });
+  removeClasses.forEach(function (className) {
+    return removeClass(element, className);
+  });
   // Wait for all animations to finish
   return Promise.all([enterAnimation({
     namespace: namespace,
-    addClasses: addClasses,
-    removeClasses: removeClasses,
+    addClasses: [],
+    removeClasses: [],
     element: element,
     target: target,
     operation: operation,

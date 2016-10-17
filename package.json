@@ -1,6 +1,6 @@
 {
   "name": "animorph",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Morph your dom with style",
   "main": "src/vanilla.js",
   "scripts": {
@@ -25,7 +25,9 @@
   ],
   "files": [
     "src/",
-    "dist/"
+    "dist/",
+    "typings/",
+    "index.d.ts"
   ],
   "author": "Claudio Baumgartner",
   "license": "MIT",
