@@ -87,12 +87,15 @@ export function morphAnimation ({
   // Create clones which are needed for the morph effect
   const leavePlaceholder = _createLeavePlaceholder(element);
   const movePlaceholder = _createMovePlaceholder(element, morphParent);
+  // Add final classes for the enter element to determine the correct target position
+  addClasses.forEach((className) => addClass(element, className));
+  removeClasses.forEach((className) => removeClass(element, className));
   // Wait for all animations to finish
   return Promise.all([
     enterAnimation({
       namespace,
-      addClasses,
-      removeClasses,
+      addClasses: [],
+      removeClasses: [],
       element,
       target,
       operation,
@@ -103,8 +106,8 @@ export function morphAnimation ({
       addClasses,
       removeClasses,
       element: movePlaceholder,
-      morphParent,
       target: element,
+      morphParent,
       animationIndex
     }),
     removeAnimation({
@@ -152,8 +155,11 @@ function moveAnimation ({
 }) {
   const targetPosition = _getElementPosition(target);
   const parentPosition = _getElementPosition(morphParent);
-  const top = targetPosition.top - parentPosition.top;
-  const left = targetPosition.left - parentPosition.left;
+  const targetStyles = window.getComputedStyle(target);
+  
+  const top = targetPosition.top - parentPosition.top - parseFloat(targetStyles.marginTop);
+  const left = targetPosition.left - parentPosition.left - parseFloat(targetStyles.marginLeft);
+
   return animation({
     namespace,
     element,
@@ -223,8 +229,9 @@ function _createMovePlaceholder (node, morphParent) {
   const clone = cloneNode(node);
   const elementPosition = _getElementPosition(node);
   const parentPosition = _getElementPosition(morphParent);
-  const top = elementPosition.top - parentPosition.top;
-  const left = elementPosition.left - parentPosition.left;
+  const nodeStyles = window.getComputedStyle(node);
+  const top = elementPosition.top - parentPosition.top - parseFloat(nodeStyles.marginTop);
+  const left = elementPosition.left - parentPosition.left - parseFloat(nodeStyles.marginLeft);
   clone.style.position = 'absolute';
   clone.style.left = `${left}px`;
   clone.style.top = `${top}px`;

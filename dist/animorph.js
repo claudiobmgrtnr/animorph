@@ -326,7 +326,7 @@ function morphAnimation(_ref3) {
   // Create clones which are needed for the morph effect
   var leavePlaceholder = _createLeavePlaceholder(element);
   var movePlaceholder = _createMovePlaceholder(element, morphParent);
-
+  // Add final classes for the enter element to determine the correct target position
   addClasses.forEach(function (className) {
     return addClass(element, className);
   });
@@ -347,8 +347,8 @@ function morphAnimation(_ref3) {
     addClasses: addClasses,
     removeClasses: removeClasses,
     element: movePlaceholder,
-    morphParent: morphParent,
     target: element,
+    morphParent: morphParent,
     animationIndex: animationIndex
   }), removeAnimation({
     namespace: namespace,
@@ -396,8 +396,11 @@ function moveAnimation(_ref4) {
 
   var targetPosition = _getElementPosition(target);
   var parentPosition = _getElementPosition(morphParent);
-  var top = targetPosition.top - parentPosition.top;
-  var left = targetPosition.left - parentPosition.left;
+  var targetStyles = window.getComputedStyle(target);
+
+  var top = targetPosition.top - parentPosition.top - parseFloat(targetStyles.marginTop);
+  var left = targetPosition.left - parentPosition.left - parseFloat(targetStyles.marginLeft);
+
   return animation({
     namespace: namespace,
     element: element,
@@ -469,8 +472,9 @@ function _createMovePlaceholder(node, morphParent) {
   var clone = cloneNode(node);
   var elementPosition = _getElementPosition(node);
   var parentPosition = _getElementPosition(morphParent);
-  var top = elementPosition.top - parentPosition.top;
-  var left = elementPosition.left - parentPosition.left;
+  var nodeStyles = window.getComputedStyle(node);
+  var top = elementPosition.top - parentPosition.top - parseFloat(nodeStyles.marginTop);
+  var left = elementPosition.left - parentPosition.left - parseFloat(nodeStyles.marginLeft);
   clone.style.position = 'absolute';
   clone.style.left = left + 'px';
   clone.style.top = top + 'px';
