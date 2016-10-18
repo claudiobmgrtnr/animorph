@@ -12,24 +12,23 @@ function requestAnimationFramePromise (frames) {
 }
 
 function createDemo (html, css, test) {
-    var style = document.createElement('style');
-    style.innerHTML = css;
-    var div = document.createElement('div');
-    div.innerHTML = html;
-    div.appendChild(style);
-    document.body.appendChild(div);
-    function cleanup () {
-        document.body.removeChild(div);
-    }
-    return Promise.resolve()
+  var style = document.createElement('style');
+  style.innerHTML = css;
+  var div = document.createElement('div');
+  div.innerHTML = html;
+  div.appendChild(style);
+  document.body.appendChild(div);
+  function cleanup () {
+    document.body.removeChild(div);
+  }
+  return Promise.resolve()
         .then(function () {
-            return test();
+          return test();
         })
         .then(cleanup);
 }
 
 describe('test replaceClasses', function () {
-
   it('animorph was loaded', function () {
     assert.equal(typeof animorph, 'object');
     assert.equal(typeof animorph.animorph, 'function');
@@ -87,21 +86,19 @@ describe('test replaceClasses', function () {
   });
 });
 
-
-
 describe('test appendTo', function () {
-    it('should create clone', function () {
-        return createDemo(
+  it('should create clone', function () {
+    return createDemo(
             '<div class="source"><div class="element">Demo</div></div><div class="target"></div>',
             '.am-animate { transition: 2s }',
             function () {
-                var element = document.querySelector('.element');
-                var target = document.querySelector('.target');
-                animorph.appendTo(element, target);
-                return requestAnimationFramePromise().then(function () {
-                    var clone = document.querySelector('body > .element');
-                    assert.isOk(clone, 'test that clone was found as direct child in body element');
-                });
+              var element = document.querySelector('.element');
+              var target = document.querySelector('.target');
+              animorph.appendTo(element, target);
+              return requestAnimationFramePromise().then(function () {
+                var clone = document.querySelector('body > .element');
+                assert.isOk(clone, 'test that clone was found as direct child in body element');
+              });
             });
-    });
+  });
 });
