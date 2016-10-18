@@ -478,7 +478,7 @@ function _createMovePlaceholder(node, morphParent) {
   clone.style.position = 'absolute';
   clone.style.left = left + 'px';
   clone.style.top = top + 'px';
-  document.body.insertAdjacentElement('afterend', clone);
+  morphParent.appendChild(clone);
   return clone;
 }
 

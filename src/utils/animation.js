@@ -156,7 +156,7 @@ function moveAnimation ({
   const targetPosition = _getElementPosition(target);
   const parentPosition = _getElementPosition(morphParent);
   const targetStyles = window.getComputedStyle(target);
-  
+
   const top = targetPosition.top - parentPosition.top - parseFloat(targetStyles.marginTop);
   const left = targetPosition.left - parentPosition.left - parseFloat(targetStyles.marginLeft);
 
@@ -235,7 +235,7 @@ function _createMovePlaceholder (node, morphParent) {
   clone.style.position = 'absolute';
   clone.style.left = `${left}px`;
   clone.style.top = `${top}px`;
-  document.body.insertAdjacentElement('afterend', clone);
+  morphParent.appendChild(clone);
   return clone;
 }
 
