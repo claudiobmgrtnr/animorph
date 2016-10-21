@@ -153,12 +153,11 @@ function moveAnimation ({
   morphParent,
   animationIndex
 }) {
-  const targetPosition = _getElementPosition(target);
-  const parentPosition = _getElementPosition(morphParent);
+  const targetPosition = _getElementPosition(target, morphParent);
   const targetStyles = window.getComputedStyle(target);
 
-  const top = targetPosition.top - parentPosition.top - parseFloat(targetStyles.marginTop);
-  const left = targetPosition.left - parentPosition.left - parseFloat(targetStyles.marginLeft);
+  const top = targetPosition.top - parseFloat(targetStyles.marginTop);
+  const left = targetPosition.left - parseFloat(targetStyles.marginLeft);
 
   return animation({
     namespace,
@@ -264,14 +263,18 @@ function _startAnimation ({
   }));
 }
 
-function _getElementPosition (node) {
-  const rect = node.getBoundingClientRect();
-  const offset = {
-    top: rect.top + document.body.scrollTop,
-    left: rect.left + document.body.scrollLeft
-  };
-  return offset;
+function _getElementPosition ( node, relativeEl = document.body ) {
+  var x = 0;
+  var y = 0;
+  while (node && node != relativeEl && !isNaN( node.offsetLeft ) && !isNaN( node.offsetTop )) {
+    x += node.offsetLeft - node.scrollLeft + node.clientLeft;
+    y += node.offsetTop - node.scrollTop + node.clientTop;
+    node = node.offsetParent;
+  }
+  return { top: y, left: x };
 }
+
+
 
 function _removeAnimationClasses ({element, animationName, namespace}) {
   disableTransitions(element);

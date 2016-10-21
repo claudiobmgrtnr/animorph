@@ -394,12 +394,11 @@ function moveAnimation(_ref4) {
   var morphParent = _ref4.morphParent;
   var animationIndex = _ref4.animationIndex;
 
-  var targetPosition = _getElementPosition(target);
-  var parentPosition = _getElementPosition(morphParent);
+  var targetPosition = _getElementPosition(target, morphParent);
   var targetStyles = window.getComputedStyle(target);
 
-  var top = targetPosition.top - parentPosition.top - parseFloat(targetStyles.marginTop);
-  var left = targetPosition.left - parentPosition.left - parseFloat(targetStyles.marginLeft);
+  var top = targetPosition.top - parseFloat(targetStyles.marginTop);
+  var left = targetPosition.left - parseFloat(targetStyles.marginLeft);
 
   return animation({
     namespace: namespace,
@@ -515,12 +514,16 @@ function _startAnimation(_ref6) {
 }
 
 function _getElementPosition(node) {
-  var rect = node.getBoundingClientRect();
-  var offset = {
-    top: rect.top + document.body.scrollTop,
-    left: rect.left + document.body.scrollLeft
-  };
-  return offset;
+  var relativeEl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
+
+  var x = 0;
+  var y = 0;
+  while (node && node != relativeEl && !isNaN(node.offsetLeft) && !isNaN(node.offsetTop)) {
+    x += node.offsetLeft - node.scrollLeft + node.clientLeft;
+    y += node.offsetTop - node.scrollTop + node.clientTop;
+    node = node.offsetParent;
+  }
+  return { top: y, left: x };
 }
 
 function _removeAnimationClasses(_ref7) {
