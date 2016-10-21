@@ -1,4 +1,4 @@
-import { addClass, removeClass, detachNode, attachNode, cloneNode, waitUntilTransitionEnd, enableTransitions, disableTransitions, getTransitionDelay, forceReflow } from './dom-manipulation';
+import { addClass, removeClass, getElementPosition, detachNode, attachNode, cloneNode, waitUntilTransitionEnd, enableTransitions, disableTransitions, getTransitionDelay, forceReflow } from './dom-manipulation';
 
 /**
  * An animation which adds the `enter` classes and adds the element to the dom
@@ -153,11 +153,12 @@ function moveAnimation ({
   morphParent,
   animationIndex
 }) {
-  const targetPosition = _getElementPosition(target, morphParent);
+  const targetPosition = getElementPosition(target);
+  const parentPosition = getElementPosition(morphParent);
   const targetStyles = window.getComputedStyle(target);
 
-  const top = targetPosition.top - parseFloat(targetStyles.marginTop);
-  const left = targetPosition.left - parseFloat(targetStyles.marginLeft);
+  const top = targetPosition.top - parentPosition.top - parseFloat(targetStyles.marginTop);
+  const left = targetPosition.left - parentPosition.left - parseFloat(targetStyles.marginLeft);
 
   return animation({
     namespace,
@@ -226,11 +227,12 @@ function _createLeavePlaceholder (node) {
  */
 function _createMovePlaceholder (node, morphParent) {
   const clone = cloneNode(node);
-  const elementPosition = _getElementPosition(node);
-  const parentPosition = _getElementPosition(morphParent);
+  const elementPosition = getElementPosition(node);
+  const parentPosition = getElementPosition(morphParent);
   const nodeStyles = window.getComputedStyle(node);
   const top = elementPosition.top - parentPosition.top - parseFloat(nodeStyles.marginTop);
   const left = elementPosition.left - parentPosition.left - parseFloat(nodeStyles.marginLeft);
+
   clone.style.position = 'absolute';
   clone.style.left = `${left}px`;
   clone.style.top = `${top}px`;
@@ -262,19 +264,6 @@ function _startAnimation ({
     enableTransitions(element);
   }));
 }
-
-function _getElementPosition ( node, relativeEl = document.body ) {
-  var x = 0;
-  var y = 0;
-  while (node && node != relativeEl && !isNaN( node.offsetLeft ) && !isNaN( node.offsetTop )) {
-    x += node.offsetLeft - node.scrollLeft + node.clientLeft;
-    y += node.offsetTop - node.scrollTop + node.clientTop;
-    node = node.offsetParent;
-  }
-  return { top: y, left: x };
-}
-
-
 
 function _removeAnimationClasses ({element, animationName, namespace}) {
   disableTransitions(element);

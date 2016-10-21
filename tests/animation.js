@@ -19,9 +19,9 @@ function createDemo (html, css, test) {
   document.head.appendChild(style);
   document.body.appendChild(div);
   function cleanup () {
-      document.body.removeChild(div);
-      document.head.removeChild(style);
-      document.body.innerHTML = "";
+    document.body.removeChild(div);
+    document.head.removeChild(style);
+    document.body.innerHTML = '';
   }
   return Promise.resolve()
         .then(function () {
@@ -31,12 +31,12 @@ function createDemo (html, css, test) {
 }
 
 function _getElementPosition (node) {
-    const rect = node.getBoundingClientRect();
-    const offset = {
-        top: rect.top + document.body.scrollTop,
-        left: rect.left + document.body.scrollLeft
-    };
-    return offset;
+  const rect = node.getBoundingClientRect();
+  const offset = {
+    top: rect.top + document.body.scrollTop,
+    left: rect.left + document.body.scrollLeft
+  };
+  return offset;
 }
 
 describe('test replaceClasses', function () {
@@ -115,49 +115,85 @@ describe('test appendTo', function () {
 });
 
 describe('test enter placeholder position', function () {
-    it('should calculate the correct clone position', function () {
-        return createDemo(
+  it('should calculate the correct clone position', function () {
+    return createDemo(
             '<div class="source"><div class="element">Demo</div></div><div class="target"></div>',
             '.am-animate { transition: 2s } body { margin: 0 }',
             function () {
-                var element = document.querySelector('.element');
-                var target = document.querySelector('.target');
-                var positionElement = _getElementPosition(element);
-                animorph.appendTo(element, target);
-                var clone = document.querySelector('body > .element');
-                var positionClone = _getElementPosition(clone);
-                assert.deepEqual(positionElement, positionClone, 'test that placeholder has the correct start position');
+              var element = document.querySelector('.element');
+              var target = document.querySelector('.target');
+              var positionElement = _getElementPosition(element);
+              animorph.appendTo(element, target);
+              var clone = document.querySelector('body > .element');
+              var positionClone = _getElementPosition(clone);
+              assert.deepEqual(positionElement, positionClone, 'test that placeholder has the correct start position');
             });
-    });
-    it('should calculate the correct clone position if body has a margin', function () {
-        return createDemo(
+  });
+  it('should calculate the correct clone position if body has a margin', function () {
+    return createDemo(
             '<div class="source"><div class="element">Demo</div></div><div class="target"></div>',
             '.am-animate { transition: 2s } body { margin: 100px }',
             function () {
-                var element = document.querySelector('.element');
-                var target = document.querySelector('.target');
-                var positionElement = _getElementPosition(element);
-                animorph.appendTo(element, target);
-                var clone = document.querySelector('body > .element');
+              var element = document.querySelector('.element');
+              var target = document.querySelector('.target');
+              var positionElement = _getElementPosition(element);
+              animorph.appendTo(element, target);
+              var clone = document.querySelector('body > .element');
+              var positionClone = _getElementPosition(clone);
+              assert.deepEqual(positionElement, positionClone, 'test that placeholder has the correct start position');
+            });
+  });
+  it('should calculate the correct clone position (with margin)', function () {
+    return createDemo(
+        '<div class="source"><div class="element">Demo</div></div><div class="target"></div>',
+        '.am-animate { transition: 2s } .element { margin-top: -10px }',
+        function (container) {
+          var element = container.querySelector('.element');
+          var target = container.querySelector('.target');
+          var positionElement = _getElementPosition(element);
+          animorph.appendTo(element, target);
+          var clone = document.querySelector('body > .element');
+
+          return requestAnimationFramePromise().then(function () {
+            var positionClone = _getElementPosition(clone);
+            assert.deepEqual(positionElement, positionClone, 'test that placeholder has the correct start position');
+          });
+        });
+  });
+
+  it('should calculate the correct clone position (with borders)', function () {
+    return createDemo(
+            '<div class="wrapper"><div class="source"><div class="element">Demo</div></div><div class="target"></div></div>',
+            '.am-animate { transition: 2s } .element { margin-top: -10px } .wrapper { border: 10px solid black; margin: -5px }',
+            function (container) {
+              var element = container.querySelector('.element');
+              var target = container.querySelector('.target');
+              var positionElement = _getElementPosition(element);
+              animorph.appendTo(element, target);
+              var clone = document.querySelector('body > .element');
+
+              return requestAnimationFramePromise().then(function () {
                 var positionClone = _getElementPosition(clone);
                 assert.deepEqual(positionElement, positionClone, 'test that placeholder has the correct start position');
+              });
             });
-    });
-    it('should calculate the correct clone position (with margin)', function () {
-        return createDemo(
-            '<div class="source"><div class="element">Demo</div></div><div class="target"></div>',
-            '.am-animate { transition: 2s } .element { margin-top: -10px }',
-            function (container) {
-                var element = container.querySelector('.element');
-                var target = container.querySelector('.target');
-                var positionElement = _getElementPosition(element);
-                animorph.appendTo(element, target);
-                var clone = document.querySelector('body > .element');
+  });
 
-                return requestAnimationFramePromise().then(function () {
-                    var positionClone = _getElementPosition(clone);
-                    assert.deepEqual(positionElement, positionClone, 'test that placeholder has the correct start position');
-                });
+  it('should calculate the correct clone position (with morph parent)', function () {
+    return createDemo(
+            '<div class="wrapper"><div class="source"><div class="element">Demo</div></div><div class="target"></div></div>',
+            '.am-animate { transition: 2s } .element { } .wrapper { margin: -5px; position: relative }',
+            function (container) {
+              var element = container.querySelector('.element');
+              var target = container.querySelector('.target');
+              var wrapper = container.querySelector('.wrapper');
+              var positionElement = _getElementPosition(element);
+              animorph.appendTo(element, target, { morphParent: wrapper });
+              var clone = document.querySelector('.wrapper > .element');
+              return requestAnimationFramePromise().then(function () {
+                var positionClone = _getElementPosition(clone);
+                assert.deepEqual(positionElement, positionClone, 'test that placeholder has the correct start position');
+              });
             });
-    });
+  });
 });

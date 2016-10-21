@@ -92,7 +92,28 @@ function enableTransitions(node) {
  * @param  {HTMLElement} node The element to measure
  * @return {{left: {Number}, top: {Number} }
  */
+function getElementPosition(node) {
+  if (node === document.body) {
+    return { left: 0, top: 0 };
+  }
+  // Support: IE <=11 only
+  // Running getBoundingClientRect on a
+  // disconnected node in IE throws an error
+  if (!node.getClientRects().length) {
+    return { top: 0, left: 0 };
+  }
+  var rect = node.getBoundingClientRect();
+  if (rect.width || rect.height) {
+    var docElem = document.documentElement;
+    return {
+      top: rect.top + window.pageYOffset - docElem.clientTop,
+      left: rect.left + window.pageXOffset - docElem.clientLeft
+    };
+  }
 
+  // Return zeros for disconnected and hidden elements (gh-2310)
+  return rect;
+}
 
 /**
  * Returns a Promise which is resolved after delay of (transition duration + transition delay).
@@ -394,11 +415,12 @@ function moveAnimation(_ref4) {
   var morphParent = _ref4.morphParent;
   var animationIndex = _ref4.animationIndex;
 
-  var targetPosition = _getElementPosition(target, morphParent);
+  var targetPosition = getElementPosition(target);
+  var parentPosition = getElementPosition(morphParent);
   var targetStyles = window.getComputedStyle(target);
 
-  var top = targetPosition.top - parseFloat(targetStyles.marginTop);
-  var left = targetPosition.left - parseFloat(targetStyles.marginLeft);
+  var top = targetPosition.top - parentPosition.top - parseFloat(targetStyles.marginTop);
+  var left = targetPosition.left - parentPosition.left - parseFloat(targetStyles.marginLeft);
 
   return animation({
     namespace: namespace,
@@ -469,11 +491,12 @@ function _createLeavePlaceholder(node) {
  */
 function _createMovePlaceholder(node, morphParent) {
   var clone = cloneNode(node);
-  var elementPosition = _getElementPosition(node);
-  var parentPosition = _getElementPosition(morphParent);
+  var elementPosition = getElementPosition(node);
+  var parentPosition = getElementPosition(morphParent);
   var nodeStyles = window.getComputedStyle(node);
   var top = elementPosition.top - parentPosition.top - parseFloat(nodeStyles.marginTop);
   var left = elementPosition.left - parentPosition.left - parseFloat(nodeStyles.marginLeft);
+
   clone.style.position = 'absolute';
   clone.style.left = left + 'px';
   clone.style.top = top + 'px';
@@ -511,19 +534,6 @@ function _startAnimation(_ref6) {
       enableTransitions(element);
     });
   });
-}
-
-function _getElementPosition(node) {
-  var relativeEl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
-
-  var x = 0;
-  var y = 0;
-  while (node && node != relativeEl && !isNaN(node.offsetLeft) && !isNaN(node.offsetTop)) {
-    x += node.offsetLeft - node.scrollLeft + node.clientLeft;
-    y += node.offsetTop - node.scrollTop + node.clientTop;
-    node = node.offsetParent;
-  }
-  return { top: y, left: x };
 }
 
 function _removeAnimationClasses(_ref7) {

@@ -85,12 +85,26 @@ export function enableTransitions (node) {
  * @return {{left: {Number}, top: {Number} }
  */
 export function getElementPosition (node) {
+  if (node === document.body) {
+    return { left: 0, top: 0 };
+  }
+  // Support: IE <=11 only
+  // Running getBoundingClientRect on a
+  // disconnected node in IE throws an error
+  if (!node.getClientRects().length) {
+    return { top: 0, left: 0 };
+  }
   const rect = node.getBoundingClientRect();
-  const offset = {
-    top: rect.top + document.body.scrollTop,
-    left: rect.left + document.body.scrollLeft
-  };
-  return offset;
+  if (rect.width || rect.height) {
+    const docElem = document.documentElement;
+    return {
+      top: rect.top + window.pageYOffset - docElem.clientTop,
+      left: rect.left + window.pageXOffset - docElem.clientLeft
+    };
+  }
+
+  // Return zeros for disconnected and hidden elements (gh-2310)
+  return rect;
 }
 
 /**
