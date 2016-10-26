@@ -13,7 +13,7 @@ Animorph.js is a small javascript framework that helps you to move any kind of e
 * CommonJS, AMD, and global interface
 * TypeScript Definitions (optional)
 
-Check it out on [codepen](http://codepen.io/claudiobmgrtnr/pen/NRrYaQ)
+Check it out on [codepen](http://codepen.io/claudiobmgrtnr/pen/zKmWdX)
 
 Installation
 ------------
