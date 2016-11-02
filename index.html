@@ -1,175 +1,114 @@
-<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-<script src="https://unpkg.com/animorph/dist/animorph.jquery.min.js"></script>
-
-<style>
-	body {
-		padding: 50px;
-		margin: 0;
-	}
-	* {
-		font-family: Helvetica Neue, Helvetica, Arial;
-	}
-	ul {
-		list-style-type: none;
-	}
-	li {
-		list-style: none;
-	}
-	.stage-title {
-		margin: 0;
-	}
-	.top {
-		min-height: 30px;
-	}
-	.interessts {
-		overflow: hidden;
-		padding: 0;
-	}
-	.stage:after {
-		content: '';
-		display: table;
-		width: 100%;
-		clear: both;
-	}
-
-	.stage-left {
-		float: left;
-		width: 50%;
-	}
-
-	.stage-right {
-		float: right;
-		width: 50%;
-	}
-	/*Base animation configurations*/
-	.am-leave,
-	.am-move,
-	.am-enter {
-		transition: all 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
-	}
-	/*Title styling*/
-	.stage-title.am-leave-prepare {
-		visibility: hidden;
-	}
-	.stage-title.am-leave-active {
-		visibility: hidden;
-	}
-	.stage-title.stage-title--small,
-	.stage-title.am-enter-prepare {
-		font-size: 15px;
-	}
-	.stage-title.am-enter {
-		visibility: hidden;
-	}
-	.stage-title li {
-		display: inline;
-	}
-	/*Element styling*/
-	.element {
-		cursor: pointer;
-	}
-	.element.am-leave,
-	.element.am-move,
-	.element.am-enter {
-		transition-delay: 500ms;
-	}
-	.element.am-enter {
-		overflow: hidden;
-		visibility: hidden;
-	}
-	/*Selected element styling*/
-	.selected.am-leave-prepare {
-		visibility: hidden;
-	}
-	.selected.am-leave-active {
-		visibility: hidden;
-	}
-	.element--bold {
-		font-weight: bold;
-		font-size: 15px;
-	}
-	/*Not selected element styling*/
-	.sortOut.am-leave {
-		transition-delay: 0.7s;
-		opacity: 1;
-		transform: translateX(0);
-	}
-	.sortOut.am-leave-stagger {
-		transition-delay: 0.1s;
-	}
-	.sortOut.am-leave-active {
-		transform: translateX(500px);
-		opacity: 0;
-	}
-	/*New added element styling*/
-	.new-element {
-		transition: all 400ms;
-		transition-delay: .3s;
-		transform: translateY(0);
-		font-family: "Comic Sans MS", sans;
-	}
-	.new-element.am-enter {
-		transform: translateY(1000px);
-	}
-	.new-element.am-enter-stagger {
-		transition-delay: 0.2s;
-	}
-	.glasses {
-		z-index: 1;
-		transition: all 1200ms;
-		transition-delay: .3s;
-		transform: translateY(0);
-		font-family: "Comic Sans MS", sans;
-	}
-	.glasses.am-enter-prepare {
-	}
-	.glasses.am-enter {
-		transform: translateY(-1500px);
-	}
-	.glasses.am-enter-stagger {
-		transition-delay: 0.2s;
-	}
-</style>
-
-
-<h1>Animorph</h1>
-
-<a href="https://github.com/claudiobmgrtnr/animorph/">Github</a>
-
-<div class="stage">
-	<div class="stage-left">
-		<h2 class="stage-title">I'm interested in </h2>
-	</div>
-	<div class="stage-right">
-		<div class="top">
-		</div>
-		<ul class="interessts">
-			<li class="element">Football</li>
-			<li class="element">Baseball</li>
-			<li class="element">Basketball</li>
-			<li class="element">Ice hockey</li>
-		</ul>
-	</div>
-</div>
-
-<script>
-	$('.interessts').on('click', '.element', function () {
-		var elem = $(this);
-		var notClicked = elem.siblings();
-		notClicked.addClass('sortOut');
-		elem.addClass('selected');
-		$('.stage-title').amPrependTo('.top',{ addClasses: 'stage-title--small'});
-		notClicked.amRemove({ addClasses: 'element--hide'});
-		elem.amAppendTo('.top .stage-title', { addClasses: 'element--bold'});
-		var newElements = $();
-		["Such Wow", "Much Amaze", "<img style='position: relative' src='https://media.giphy.com/media/YOAJ0pILjWEus/giphy.gif'> <div style='position: absolute; top: 41px; left: 19px; width: 81px; height: 20px; transform: scale(-1, 1) rotate(-11deg);'class='glasses'></div>"].map(function(text) {
-			newElements = newElements.add($("<li class='new-element'>" + text + "</li>"));
-		});
-		$(newElements).amAppendTo($('.interessts'));
-		var glasses = $();
-		["<img style='max-height: 20px;' src='https://s3-us-west-1.amazonaws.com/xrl/talks/sdjs-deal-with-it/sunglasses.png'>"].map(function(text) {
-			glasses = glasses.add($("<li class='glasses'>" + text + "</li>"));
-		});
-		$(glasses).amAppendTo($('.glasses'));
-	});
-</script>
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>animorph</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/cayman.css">
+    <link rel="stylesheet" href="css/prism.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">animorph</h1>
+      <h2 class="project-tagline">Morph your dom with style</h2><a href="https://github.com/claudiobmgrtnr/animorph#readme" target="_blank" class="btn">View on GitHub</a><a href="https://npmjs.com/package/animorph" target="_blank" class="btn">View on npm</a>
+    </section>
+    <section data-spy="scroll" data-target=".scrollspy" class="main-content">
+      <div class="row">
+        <div class="col-md-3 col-xs-3 bs-docs-sidebar">
+          <ul id="sidebar" class="nav nav-stacked fixed">
+            <li class="active"><a href="index.html">Main
+                <ul class="nav nav-stacked">
+                </ul></a></li>
+            <li><a href="jquery.js.html">jquery.js</a></li>
+            <li><a href="vanilla.js.html">vanilla.js</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <section id="Main" class="readme"><h1>Animorph</h1>
+<p><a href="http://badge.fury.io/js/animorph"><img src="https://badge.fury.io/js/animorph.svg" alt="npm version"></a>
+<a href="https://travis-ci.org/claudiobmgrtnr/animorph"><img src="https://travis-ci.org/claudiobmgrtnr/animorph.svg" alt="Build status"></a> <a href="https://david-dm.org/claudiobmgrtnr/animorph"><img src="https://david-dm.org/claudiobmgrtnr/animorph.svg" alt="Dependency Status"></a> <a href="https://github.com/Flet/semistandard"><img src="https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square" alt="js-semistandard-style"></a> <a href=""><img src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000" alt="license"></a></p>
+<p>Morph your dom with style.<br>
+Animorph.js is a small javascript framework that helps you to move any kind of elements inside of your dom.</p>
+<ul>
+<li>Lighweight (below 2kb gziped)</li>
+<li>Chrome, Firefox, IE 9+, Safari</li>
+<li>Zero dependencies</li>
+<li>jQuery bindings (optional)</li>
+<li>CommonJS, AMD, and global interface</li>
+<li>TypeScript Definitions (optional)</li>
+</ul>
+<p>Features</p>
+<p>As the main task of Animorph is adding and removing CSS classes it leaves
+you in control about the animation details.</p>
+<ul>
+<li>Enter animation</li>
+<li>Stagger animation</li>
+<li>Leave animation</li>
+<li>Move animation</li>
+</ul>
+<p>Check it out on <a href="http://codepen.io/claudiobmgrtnr/pen/zKmWdX">codepen</a></p>
+<h2>Installation</h2>
+<p>NPM</p>
+<p>Install the plugin with npm:</p>
+<pre><code class="language-shell">$ npm install animorph --save
+</code></pre>
+<p>Yarn</p>
+<p>Install the plugin using yarn:</p>
+<pre><code class="language-shell">$ yarn add animorph
+</code></pre>
+<p>CDN</p>
+<ul>
+<li>https://unpkg.com/animorph/dist/animorph.min.js</li>
+<li>https://unpkg.com/animorph/dist/animorph.jquery.min.js</li>
+</ul>
+<h2>Basic Usage</h2>
+<p>The following javascript code will start the animation and add all classes similar to angular animate so you
+can keep the entire animation declaration you css files.</p>
+<p>Vanilla javascript without any dependencies</p>
+<pre><code class="language-js">  const element = document.querySelector('.foo');
+  const wrapper = document.querySelector('.bar');
+  animorph.appendTo(element, wrapper);
+</code></pre>
+<p>jQuery (please use <code>animorph.jquery.min.js</code> from the dist folder)</p>
+<pre><code class="language-js">  $('.foo').amAppendTo('.bar');
+</code></pre>
+<p>Please take a look at <a href="https://github.com/claudiobmgrtnr/animorph/blob/master/examples/enter-example.html">the very simple enter example</a> or at the slightly <a href="https://github.com/claudiobmgrtnr/animorph/blob/master/examples/advanced-example.html">more advanced example</a></p>
+<h1>Contribution</h1>
+<p>You're free to contribute to this project by submitting <a href="https://github.com/claudiobmgrtnr/animorph/issues">issues</a> and/or <a href="https://github.com/claudiobmgrtnr/animorph/pulls">pull requests</a>.
+This project uses the <a href="https://github.com/Flet/semistandard">semistandard code style</a>.</p>
+<h1>License</h1>
+<p>This project is licensed under <a href="https://github.com/claudiobmgrtnr/animorph/blob/master/LICENSE">MIT</a>.</p>
+</section>
+          <div class="footer site-footer">
+            <div class="span site-footer-owner"><a href="https://github.com/mr-doc/mr-doc-theme-cayman">Cayman</a> is maintained by <a href="https://github.com/iwatakeshi">iwatakeshi</a>.</div>
+            <div class="span site-footer-credits">This page was generated by <a href="https://github.com/mr-doc/mr-doc">Mr. Doc</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/affix.js"></script>
+    <script src="js/dropdown.js"></script>
+    <script src="js/scrollspy.js"></script>
+    <script src="js/prism.js"></script>
+    <script src="js/prism-bash.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('body').scrollspy({
+          target: ".bs-docs-sidebar",
+          offset: 40
+        });
+        $('#sidebar').affix({
+          offset:{
+            bottom:60,
+            top: 60
+          }
+        }) 
+      });
+    </script>
+  </body>
+</html>

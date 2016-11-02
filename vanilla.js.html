@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>animorph</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/cayman.css">
+    <link rel="stylesheet" href="css/prism.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">animorph</h1>
+      <h2 class="project-tagline">Morph your dom with style</h2><a href="https://github.com/claudiobmgrtnr/animorph#readme" target="_blank" class="btn">View on GitHub</a><a href="https://npmjs.com/package/animorph" target="_blank" class="btn">View on npm</a>
+    </section>
+    <section data-spy="scroll" data-target=".scrollspy" class="main-content">
+      <div class="row">
+        <div class="col-md-3 col-xs-3 bs-docs-sidebar">
+          <ul id="sidebar" class="nav nav-stacked fixed">
+            <li><a href="index.html">Main</a></li>
+            <li><a href="jquery.js.html">jquery.js</a></li>
+            <li class="active"><a href="vanilla.js.html">vanilla.js
+                <ul class="nav nav-stacked">
+                  <li><a href="#appendTo"><i class="alert alert-info"></i><span>appendTo</span></a>
+                  </li>
+                  <li><a href="#prependTo"><i class="alert alert-info"></i><span>prependTo</span></a>
+                  </li>
+                  <li><a href="#remove"><i class="alert alert-info"></i><span>remove</span></a>
+                  </li>
+                  <li><a href="#enter"><i class="alert alert-info"></i><span>enter</span></a>
+                  </li>
+                  <li><a href="#leave"><i class="alert alert-info"></i><span>leave</span></a>
+                  </li>
+                  <li><a href="#insertAfter"><i class="alert alert-info"></i><span>insertAfter</span></a>
+                  </li>
+                  <li><a href="#replaceClasses"><i class="alert alert-info"></i><span>replaceClasses</span></a>
+                  </li>
+                </ul></a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <section id="appendTo">
+            <h1>appendTo</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>appendTo()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>element</td>
+                <td>HTMLElement</td>
+                <td><p>The element to animate</p></td>
+              </tr>
+              <tr>
+                <td>[options]</td>
+                <td>Object</td>
+                <td><p>Animorph options like namespace @see animorph</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Promise of the animation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Inserts the given element as last child to the given target.<br />If the element was in the dom before it is animated<br />from the old position to the new position.</p></div>
+          <pre><code class="language-javascript">export function appendTo (element, target, options = {}) {
+  return animorph(element, {
+    target,
+    ...options
+  });
+}</code></pre>
+          <h5>JSFiddle</h5>
+          <p>
+            <iframe width="100%" height="300" src="https://jsfiddle.net/aoz5y2n7/3/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </p>
+          <section id="prependTo">
+            <h1>prependTo</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>prependTo()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>element</td>
+                <td>HTMLElement</td>
+                <td><p>The element to animate</p></td>
+              </tr>
+              <tr>
+                <td>[options]</td>
+                <td>Object</td>
+                <td><p>Animorph options like namespace @see animorph</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Promise of the animation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Inserts the given element as first child to the given target.<br />If the element was in the dom before it is animated<br />from the old position to the new position.</p></div>
+          <pre><code class="language-javascript">export function prependTo (element, target, options = {}) {
+  return animorph(element, {
+    target,
+    operation: 'prependTo',
+    ...options
+  });
+}</code></pre>
+          <section id="remove">
+            <h1>remove</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>remove()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>element</td>
+                <td>HTMLElement</td>
+                <td><p>The element to animate</p></td>
+              </tr>
+              <tr>
+                <td>[options]</td>
+                <td>Object</td>
+                <td><p>Animorph options like namespace @see animorph</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Promise of the animation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Animate the given element and removes it from the dom after<br />the animation is complete</p></div>
+          <pre><code class="language-javascript">export function remove (element, options = {}) {
+  return animorph(element, {
+    operation: 'remove',
+    ...options
+  });
+}</code></pre>
+          <section id="enter">
+            <h1>enter</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>enter()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>element</td>
+                <td>HTMLElement</td>
+                <td><p>The element to animate</p></td>
+              </tr>
+              <tr>
+                <td>[options]</td>
+                <td>Object</td>
+                <td><p>Animorph options like namespace @see animorph</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Promise of the animation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Adds classes for an enter animation</p><p>Flow:</p><ol>
+<li>Changes the classes (without animation)<ul>
+<li>Add: <code>${namespace}-enter-prepare</code></li>
+<li>Add: <code>${namespace}-enter</code></li>
+<li>Add: <code>${namespace}-animate</code></li>
+</ul>
+</li>
+<li>Changes the classes (with animation)<ul>
+<li>Add: <code>${namespace}-enter-active</code></li>
+<li>Remove: <code>${namespace}-enter-prepare</code></li>
+</ul>
+</li>
+<li>Waits for the animation to end</li>
+<li>Changes the classes (without animation)<ul>
+<li>Remove: <code>${namespace}-enter-active</code></li>
+<li>Remove: <code>${namespace}-enter</code></li>
+<li>Remove: <code>${namespace}-animate</code></li>
+</ul>
+</li>
+<li>Fullfills the promise</li>
+</ol>
+</div>
+          <pre><code class="language-javascript">export function enter (element, options = {}) {
+  return animorph(element, {
+    operation: 'enter',
+    ...options
+  });
+}</code></pre>
+          <section id="leave">
+            <h1>leave</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>leave()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>element</td>
+                <td>HTMLElement</td>
+                <td><p>The element to animate</p></td>
+              </tr>
+              <tr>
+                <td>[options]</td>
+                <td>Object</td>
+                <td><p>Animorph options like namespace @see animorph</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Promise of the animation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Adds classes for a leave animation</p><p>Flow:</p><ol>
+<li>Changes the classes (without animation)<ul>
+<li>Add: <code>${namespace}-leave-prepare</code></li>
+<li>Add: <code>${namespace}-leave</code></li>
+<li>Add: <code>${namespace}-animate</code></li>
+</ul>
+</li>
+<li>Changes the classes (with animation)<ul>
+<li>Add: <code>${namespace}-leave-active</code></li>
+<li>Remove: <code>${namespace}-leave-prepare</code></li>
+</ul>
+</li>
+<li>Waits for the animation to end</li>
+<li>Changes the classes (without animation)<ul>
+<li>Remove: <code>${namespace}-leave-active</code></li>
+<li>Remove: <code>${namespace}-leave</code></li>
+<li>Remove: <code>${namespace}-animate</code></li>
+</ul>
+</li>
+<li>Fullfills the promise</li>
+</ol>
+</div>
+          <pre><code class="language-javascript">export function leave (element, options = {}) {
+  return animorph(element, {
+    operation: 'leave',
+    ...options
+  });
+}</code></pre>
+          <section id="insertAfter">
+            <h1>insertAfter</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>insertAfter()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>element</td>
+                <td>HTMLElement</td>
+                <td><p>The element to animate</p></td>
+              </tr>
+              <tr>
+                <td>[options]</td>
+                <td>Object</td>
+                <td><p>Animorph options like namespace @see animorph</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Promise of the animation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Inserts the given element to the dom after the given target.<br />If the element was in the dom before it is animated<br />from the old position to the new position.</p></div>
+          <pre><code class="language-javascript">export function insertAfter (element, target, options = {}) {
+  return animorph(element, {
+    target: target,
+    operation: 'insertAfter',
+    ...options
+  });
+}</code></pre>
+          <section id="replaceClasses">
+            <h1>replaceClasses</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>replaceClasses()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>element</td>
+                <td>HTMLElement</td>
+                <td><p>The element to animate</p></td>
+              </tr>
+              <tr>
+                <td>classNamesBefore</td>
+                <td>Array.&lt;String&gt;</td>
+                <td><p>Custom classes to be removed</p></td>
+              </tr>
+              <tr>
+                <td>classNamesAfter</td>
+                <td>Array.&lt;String&gt;</td>
+                <td><p>Custom classes to be added</p></td>
+              </tr>
+              <tr>
+                <td>[&quot;enter&quot;|&quot;leave&quot;]</td>
+                <td>String</td>
+                <td><p>Transition name: &quot;enter&quot;|&quot;leave&quot;</p></td>
+              </tr>
+              <tr>
+                <td>[options]</td>
+                <td>Object</td>
+                <td><p>Animorph options like namespace @see animorph</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Promise of the animation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Adds and removes css-classes from the given element.</p><p>Flow:</p><ol>
+<li>Changes the classes (without animation)<ul>
+<li>Add: <code>${namespace}-${transitionName}-prepare</code></li>
+<li>Add: <code>${namespace}-${transitionName}</code></li>
+<li>Add: <code>${namespace}-animate</code></li>
+</ul>
+</li>
+<li>Changes the classes (with animation)<ul>
+<li>Add: <code>${namespace}-${transitionName}-active</code></li>
+<li>Add: custom class names (optional)</li>
+<li>Remove: <code>${namespace}-${transitionName}-prepare</code></li>
+<li>Remove: custom class names (optional)</li>
+</ul>
+</li>
+<li>Waits for the animation to end</li>
+<li>Changes the classes (without animation)<ul>
+<li>Remove: <code>${namespace}-${transitionName}-active</code></li>
+<li>Remove: <code>${namespace}-${transitionName}</code></li>
+<li>Remove: <code>${namespace}-animate</code></li>
+</ul>
+</li>
+<li>Fullfills the promise</li>
+</ol>
+</div>
+          <pre><code class="language-javascript">export function replaceClasses (element, classNamesBefore, classNamesAfter, transitionName = 'enter', options = {}) {
+  return animorph(element, {
+    addClasses: classNamesAfter,
+    removeClasses: classNamesBefore,
+    operation: transitionName,
+    ...options
+  });
+}</code></pre>
+          <div class="footer site-footer">
+            <div class="span site-footer-owner"><a href="https://github.com/mr-doc/mr-doc-theme-cayman">Cayman</a> is maintained by <a href="https://github.com/iwatakeshi">iwatakeshi</a>.</div>
+            <div class="span site-footer-credits">This page was generated by <a href="https://github.com/mr-doc/mr-doc">Mr. Doc</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/affix.js"></script>
+    <script src="js/dropdown.js"></script>
+    <script src="js/scrollspy.js"></script>
+    <script src="js/prism.js"></script>
+    <script src="js/prism-bash.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('body').scrollspy({
+          target: ".bs-docs-sidebar",
+          offset: 40
+        });
+        $('#sidebar').affix({
+          offset:{
+            bottom:60,
+            top: 60
+          }
+        }) 
+      });
+    </script>
+  </body>
+</html>

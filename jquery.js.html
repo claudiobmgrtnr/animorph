@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>animorph</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/cayman.css">
+    <link rel="stylesheet" href="css/prism.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">animorph</h1>
+      <h2 class="project-tagline">Morph your dom with style</h2><a href="https://github.com/claudiobmgrtnr/animorph#readme" target="_blank" class="btn">View on GitHub</a><a href="https://npmjs.com/package/animorph" target="_blank" class="btn">View on npm</a>
+    </section>
+    <section data-spy="scroll" data-target=".scrollspy" class="main-content">
+      <div class="row">
+        <div class="col-md-3 col-xs-3 bs-docs-sidebar">
+          <ul id="sidebar" class="nav nav-stacked fixed">
+            <li><a href="index.html">Main</a></li>
+            <li class="active"><a href="jquery.js.html">jquery.js
+                <ul class="nav nav-stacked">
+                  <li><a href="#amAppendTo"><i class="alert alert-info"></i><span>amAppendTo</span></a>
+                  </li>
+                  <li><a href="#amPrependTo"><i class="alert alert-info"></i><span>amPrependTo</span></a>
+                  </li>
+                  <li><a href="#amRemove"><i class="alert alert-info"></i><span>amRemove</span></a>
+                  </li>
+                  <li><a href="#amLeave"><i class="alert alert-info"></i><span>amLeave</span></a>
+                  </li>
+                  <li><a href="#amInsertAfter"><i class="alert alert-info"></i><span>amInsertAfter</span></a>
+                  </li>
+                  <li><a href="#amReplaceClasses"><i class="alert alert-info"></i><span>amReplaceClasses</span></a>
+                  </li>
+                </ul></a></li>
+            <li><a href="vanilla.js.html">vanilla.js</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <section id="amAppendTo">
+            <h1>amAppendTo</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>$.fn.amAppendTo()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>target</td>
+                <td>JQuery, HTMLElement, String</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>object</td>
+                <td><p>animorph options like namespace</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Animation Promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Append the current element to the target<br />This will start a move animation if the current element is already in the dom.</p></div>
+          <pre><code class="language-javascript">$.fn.amAppendTo = function (target, options) {
+  return appendTo(this.toArray(), $(target)[0], options);
+};</code></pre>
+          <section id="amPrependTo">
+            <h1>amPrependTo</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>$.fn.amPrependTo()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>target</td>
+                <td>JQuery, HTMLElement, String</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>object</td>
+                <td><p>animorph options like namespace</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Animation Promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Prepend the current element to the target<br />This will start a move animation if the current element is already in the dom.</p></div>
+          <pre><code class="language-javascript">$.fn.amPrependTo = function (target, options) {
+  return prependTo(this.toArray(), $(target)[0], options);
+};</code></pre>
+          <section id="amRemove">
+            <h1>amRemove</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>$.fn.amRemove()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>options</td>
+                <td>object</td>
+                <td><p>animorph options like namespace</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Animation Promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Run a leave animation and remove the current element from the dom after it finished</p></div>
+          <pre><code class="language-javascript">$.fn.amRemove = function (options) {
+  return remove(this.toArray(), options);
+};</code></pre>
+          <section id="amLeave">
+            <h1>amLeave</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>$.fn.amLeave()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>options</td>
+                <td>object</td>
+                <td><p>animorph options like namespace</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Animation Promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Run a leave animation and remove the current element from the dom after it finished</p></div>
+          <pre><code class="language-javascript">$.fn.amLeave = function (options) {
+  return leave(this.toArray(), options);
+};</code></pre>
+          <section id="amInsertAfter">
+            <h1>amInsertAfter</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>$.fn.amInsertAfter()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>target</td>
+                <td>JQuery, HTMLElement, String</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>object</td>
+                <td><p>animorph options like namespace</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Animation Promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Inserts the current element after the target<br />This will start a move animation if the current element is already in the dom.</p></div>
+          <pre><code class="language-javascript">$.fn.amInsertAfter = function (target, options) {
+  return insertAfter(this.toArray(), $(target)[0], options);
+};</code></pre>
+          <section id="amReplaceClasses">
+            <h1>amReplaceClasses</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>$.fn.amReplaceClasses()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>classNamesBefore</td>
+                <td>String, Array.&lt;String&gt;</td>
+                <td><p>class names to remove</p></td>
+              </tr>
+              <tr>
+                <td>classNamesAfter</td>
+                <td>String, Array.&lt;String&gt;</td>
+                <td><p>class names to add</p></td>
+              </tr>
+              <tr>
+                <td>Transition</td>
+                <td>String</td>
+                <td><p>name <code>&quot;enter&quot;|&quot;leave&quot;</code></p></td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>object</td>
+                <td><p>animorph options like namespace</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Animation Promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Adds and removes css-classes from the given element.</p></div>
+          <pre><code class="language-javascript">$.fn.amReplaceClasses = function (classNamesBefore, classNamesAfter, transitionName, options) {
+  return replaceClasses(this.toArray(), classNamesBefore, classNamesAfter, transitionName, options);
+};
+
+export * from './vanilla.js';</code></pre>
+          <div class="footer site-footer">
+            <div class="span site-footer-owner"><a href="https://github.com/mr-doc/mr-doc-theme-cayman">Cayman</a> is maintained by <a href="https://github.com/iwatakeshi">iwatakeshi</a>.</div>
+            <div class="span site-footer-credits">This page was generated by <a href="https://github.com/mr-doc/mr-doc">Mr. Doc</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/affix.js"></script>
+    <script src="js/dropdown.js"></script>
+    <script src="js/scrollspy.js"></script>
+    <script src="js/prism.js"></script>
+    <script src="js/prism-bash.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('body').scrollspy({
+          target: ".bs-docs-sidebar",
+          offset: 40
+        });
+        $('#sidebar').affix({
+          offset:{
+            bottom:60,
+            top: 60
+          }
+        }) 
+      });
+    </script>
+  </body>
+</html>
