@@ -63,6 +63,16 @@ export function animorph (element, {
   }));
 }
 
+/**
+ * Inserts the given element as last child to the given target.
+ * If the element was in the dom before it is animated
+ * from the old position to the new position.
+ *
+ * @jsfiddle https://jsfiddle.net/aoz5y2n7/3/embedded/
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 export function appendTo (element, target, options = {}) {
   return animorph(element, {
     target,
@@ -70,6 +80,15 @@ export function appendTo (element, target, options = {}) {
   });
 }
 
+/**
+ * Inserts the given element as first child to the given target.
+ * If the element was in the dom before it is animated
+ * from the old position to the new position.
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 export function prependTo (element, target, options = {}) {
   return animorph(element, {
     target,
@@ -78,6 +97,14 @@ export function prependTo (element, target, options = {}) {
   });
 }
 
+/**
+ * Animate the given element and removes it from the dom after
+ * the animation is complete
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 export function remove (element, options = {}) {
   return animorph(element, {
     operation: 'remove',
@@ -85,6 +112,59 @@ export function remove (element, options = {}) {
   });
 }
 
+/**
+ * Adds classes for an enter animation
+ *
+ * Flow:
+ *
+ * 1. Changes the classes (without animation)
+ *    + Add: `${namespace}-enter-prepare`
+ *    + Add: `${namespace}-enter`
+ *    + Add: `${namespace}-animate`
+ * 2. Changes the classes (with animation)
+ *    + Add: `${namespace}-enter-active`
+ *    + Remove: `${namespace}-enter-prepare`
+ * 4. Waits for the animation to end
+ * 5. Changes the classes (without animation)
+ *    + Remove: `${namespace}-enter-active`
+ *    + Remove: `${namespace}-enter`
+ *    + Remove: `${namespace}-animate`
+ * 6. Fullfills the promise
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
+export function enter (element, options = {}) {
+  return animorph(element, {
+    operation: 'enter',
+    ...options
+  });
+}
+
+/**
+ * Adds classes for a leave animation
+ *
+ * Flow:
+ *
+ * 1. Changes the classes (without animation)
+ *    + Add: `${namespace}-leave-prepare`
+ *    + Add: `${namespace}-leave`
+ *    + Add: `${namespace}-animate`
+ * 2. Changes the classes (with animation)
+ *    + Add: `${namespace}-leave-active`
+ *    + Remove: `${namespace}-leave-prepare`
+ * 4. Waits for the animation to end
+ * 5. Changes the classes (without animation)
+ *    + Remove: `${namespace}-leave-active`
+ *    + Remove: `${namespace}-leave`
+ *    + Remove: `${namespace}-animate`
+ * 6. Fullfills the promise
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 export function leave (element, options = {}) {
   return animorph(element, {
     operation: 'leave',
@@ -92,6 +172,15 @@ export function leave (element, options = {}) {
   });
 }
 
+/**
+ * Inserts the given element to the dom after the given target.
+ * If the element was in the dom before it is animated
+ * from the old position to the new position.
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 export function insertAfter (element, target, options = {}) {
   return animorph(element, {
     target: target,
@@ -101,13 +190,31 @@ export function insertAfter (element, target, options = {}) {
 }
 
 /**
- * Allows to animate from one set of classes to another
+ * Adds and removes css-classes from the given element.
+ *
+ * Flow:
+ *
+ * 1. Changes the classes (without animation)
+ *    + Add: `${namespace}-${transitionName}-prepare`
+ *    + Add: `${namespace}-${transitionName}`
+ *    + Add: `${namespace}-animate`
+ * 2. Changes the classes (with animation)
+ *    + Add: `${namespace}-${transitionName}-active`
+ *    + Add: custom class names (optional)
+ *    + Remove: `${namespace}-${transitionName}-prepare`
+ *    + Remove: custom class names (optional)
+ * 4. Waits for the animation to end
+ * 5. Changes the classes (without animation)
+ *    + Remove: `${namespace}-${transitionName}-active`
+ *    + Remove: `${namespace}-${transitionName}`
+ *    + Remove: `${namespace}-animate`
+ * 6. Fullfills the promise
  *
  * @param  {HTMLElement} element        The element to animate
- * @param  {String[]} classNamesBefore  Class names before
- * @param  {String[]} classNamesAfter   Class names after
- * @param  {String} [transitionName]     Transition name (enter or leave)
- * @param  {Object} [options={}]        Animorph options like namespace
+ * @param  {String[]} classNamesBefore  Custom classes to be removed
+ * @param  {String[]} classNamesAfter   Custom classes to be added
+ * @param  {String} ["enter"|"leave"]   Transition name: "enter"|"leave"
+ * @param  {Object} [options]           Animorph options like namespace @see animorph
  * @return {Promise}                    Promise of the animation
  */
 export function replaceClasses (element, classNamesBefore, classNamesAfter, transitionName = 'enter', options = {}) {

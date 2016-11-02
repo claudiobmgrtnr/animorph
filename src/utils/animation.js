@@ -1,14 +1,26 @@
-import { addClass, removeClass, getElementPosition, detachNode, attachNode, cloneNode, waitUntilTransitionEnd, enableTransitions, disableTransitions, getTransitionDelay, forceReflow } from './dom-manipulation';
+import {
+  addClass,
+  removeClass,
+  getElementPosition,
+  detachNode,
+  attachNode,
+  cloneNode,
+  waitUntilTransitionEnd,
+  enableTransitions,
+  disableTransitions,
+  getTransitionDelay,
+  forceReflow
+} from './dom-manipulation';
 
 /**
  * An animation which adds the `enter` classes and adds the element to the dom
  *
- * @param  {String} namespace     The animation class namespace e.g. 'am'
- * @param  {String[]} addClasses  Classes which will be added once the animation starts
+ * @param  {String} namespace       The animation class namespace e.g. 'am'
+ * @param  {String[]} addClasses    Classes which will be added once the animation starts
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
- * @param  {[type]} element       The element
- * @param  {[type]} target        Optional - needed as reference to add the element into DOM
- * @param  {[type]} operation     Optional - needed to add the element into DOM
+ * @param  {HTMLElement} element    The element
+ * @param  {HTMLElement} target     Optional - needed as reference for the new DOM position
+ * @param  {"appendTo"|"prependTo"|"insertAfter"} operation  Dom operation
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 export function enterAnimation ({
@@ -37,7 +49,7 @@ export function enterAnimation ({
  * An animation which adds the `leave` classes and adds the element to the dom
  *
  * @param  {String} namespace     The animation class namespace e.g. 'am'
- * @param  {[type]} element       [description]
+ * @param  {HTMLElement} element  [description]
  * @param  {String[]} addClasses  Classes which will be added once the animation starts
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
  * @return {Promise} A promise which will be resolved once the animation is complete
@@ -106,8 +118,8 @@ export function morphAnimation ({
       addClasses,
       removeClasses,
       element: movePlaceholder,
-      target: element,
       morphParent,
+      target: element,
       animationIndex
     }),
     removeAnimation({
@@ -139,7 +151,7 @@ export function removeAnimation (options) {
  * @param  {String} namespace     The animation class namespace e.g. 'am'
  * @param  {String[]} addClasses  Classes which will be added once the animation starts
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
- * @param  {[type]} element       [description]
+ * @param  {HTMLElement} element  [description]
  * @param  {[type]} target        [description]
  * @param  {[type]} morphParent   [description]
  * @return {Promise} A promise which will be resolved once the animation is complete
@@ -183,7 +195,7 @@ function moveAnimation ({
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
  * @param  {HTMLElement} element    The Element which to animate
  * @param  {HTMLElement} morphParent   [description]
- * @param  {function} [onAnimationStart=(] [description]
+ * @param  {function} [onAnimationStart] [description]
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function animation ({
@@ -248,7 +260,7 @@ function _startAnimation ({
   animationIndex,
   animationName = 'enter'
 }) {
-  const staggeringDuration = _getStaggering({element, animationIndex, animationName, namespace});
+  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggering({element, animationIndex, animationName, namespace});
   disableTransitions(element);
   addClass(element, `${namespace}-${animationName}-prepare`);
   addClass(element, `${namespace}-${animationName}`);
@@ -276,10 +288,18 @@ function _removeAnimationClasses ({element, animationName, namespace}) {
   });
 }
 
+/**
+ * Adds the stagger classes measure the stagger duration and removes
+ * the classes again.
+ */
 function _getStaggering ({element, animationIndex, animationName, namespace}) {
   const delayWithoutStagger = getTransitionDelay(element);
+  addClass(element, `${namespace}-stagger`);
   addClass(element, `${namespace}-${animationName}-stagger`);
   const delayWithStagger = getTransitionDelay(element);
+  removeClass(element, `${namespace}-stagger`);
   removeClass(element, `${namespace}-${animationName}-stagger`);
+  // If there is no difference with or without the stagger class
+  // asume that there is no staggering
   return delayWithoutStagger === delayWithStagger ? 0 : delayWithStagger * animationIndex;
 }
