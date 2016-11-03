@@ -24,7 +24,7 @@ you in control about the animation details.
 * Leave animation
 * Move animation
 
-Check it out on [codepen](http://codepen.io/claudiobmgrtnr/pen/zKmWdX)
+Check it out on Codepen [here (basic example)](http://codepen.io/claudiobmgrtnr/pen/zKmWdX) or [here (advanced example)](http://codepen.io/claudiobmgrtnr/pen/RobeJX)
 
 Installation
 ------------
