@@ -53,7 +53,7 @@ export function attachNode (node, target, domOperation) {
       prependNode(node, target);
       break;
     case 'insertAfter':
-      node.insertAdjacentElement('afterend', target);
+      insertAfter(node, target);
       break;
     default:
       throw new Error('Invalid dom operation');
@@ -248,4 +248,18 @@ export function isDomElement (node) {
   }
   // For IE9 <3
   return node && typeof node === 'object' && node.nodeType === 1 && node.nodeName;
+}
+
+/**
+ * Inserts a new node after a desired reference node.
+ * @param referenceNode
+ * @param newNode
+ * @returns {Node}
+ */
+export function insertAfter (referenceNode, newNode) {
+  /*
+  * If referenceNode is the last child within its parent element, that's fine, because referenceNode.nextSibling
+  * will be null and insertBefore handles that case by adding to the end of the parent
+  */
+  return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }

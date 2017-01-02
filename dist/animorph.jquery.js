@@ -63,7 +63,7 @@ function attachNode(node, target, domOperation) {
       prependNode(node, target);
       break;
     case 'insertAfter':
-      node.insertAdjacentElement('afterend', target);
+      insertAfter$1(node, target);
       break;
     default:
       throw new Error('Invalid dom operation');
@@ -263,14 +263,28 @@ function isDomElement(node) {
 }
 
 /**
+ * Inserts a new node after a desired reference node.
+ * @param referenceNode
+ * @param newNode
+ * @returns {Node}
+ */
+function insertAfter$1(referenceNode, newNode) {
+  /*
+  * If referenceNode is the last child within its parent element, that's fine, because referenceNode.nextSibling
+  * will be null and insertBefore handles that case by adding to the end of the parent
+  */
+  return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
+/**
  * An animation which adds the `enter` classes and adds the element to the dom
  *
- * @param  {String} namespace     The animation class namespace e.g. 'am'
- * @param  {String[]} addClasses  Classes which will be added once the animation starts
+ * @param  {String} namespace       The animation class namespace e.g. 'am'
+ * @param  {String[]} addClasses    Classes which will be added once the animation starts
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
- * @param  {[type]} element       The element
- * @param  {[type]} target        Optional - needed as reference to add the element into DOM
- * @param  {[type]} operation     Optional - needed to add the element into DOM
+ * @param  {HTMLElement} element    The element
+ * @param  {HTMLElement} target     Optional - needed as reference for the new DOM position
+ * @param  {"appendTo"|"prependTo"|"insertAfter"} operation  Dom operation
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function enterAnimation(_ref) {
@@ -299,7 +313,7 @@ function enterAnimation(_ref) {
  * An animation which adds the `leave` classes and adds the element to the dom
  *
  * @param  {String} namespace     The animation class namespace e.g. 'am'
- * @param  {[type]} element       [description]
+ * @param  {HTMLElement} element  [description]
  * @param  {String[]} addClasses  Classes which will be added once the animation starts
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
  * @return {Promise} A promise which will be resolved once the animation is complete
@@ -370,8 +384,8 @@ function morphAnimation(_ref3) {
     addClasses: addClasses,
     removeClasses: removeClasses,
     element: movePlaceholder,
-    target: element,
     morphParent: morphParent,
+    target: element,
     animationIndex: animationIndex
   }), removeAnimation({
     namespace: namespace,
@@ -403,7 +417,7 @@ function removeAnimation(options) {
  * @param  {String} namespace     The animation class namespace e.g. 'am'
  * @param  {String[]} addClasses  Classes which will be added once the animation starts
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
- * @param  {[type]} element       [description]
+ * @param  {HTMLElement} element  [description]
  * @param  {[type]} target        [description]
  * @param  {[type]} morphParent   [description]
  * @return {Promise} A promise which will be resolved once the animation is complete
@@ -447,7 +461,7 @@ function moveAnimation(_ref4) {
  * @param  {String[]} removeClasses Classes which will be removed once the animation starts
  * @param  {HTMLElement} element    The Element which to animate
  * @param  {HTMLElement} morphParent   [description]
- * @param  {function} [onAnimationStart=(] [description]
+ * @param  {function} [onAnimationStart] [description]
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function animation(_ref5) {
@@ -480,7 +494,7 @@ function animation(_ref5) {
 
 function _createLeavePlaceholder(node) {
   var clone = cloneNode(node);
-  node.insertAdjacentElement('afterend', clone);
+  insertAfter$1(node, clone);
   return clone;
 }
 
@@ -515,7 +529,7 @@ function _startAnimation(_ref6) {
   var _ref6$animationName = _ref6.animationName;
   var animationName = _ref6$animationName === undefined ? 'enter' : _ref6$animationName;
 
-  var staggeringDuration = _getStaggering({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
+  var staggeringDuration = animationIndex === 0 ? 0 : _getStaggering({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
   disableTransitions(element);
   addClass(element, namespace + '-' + animationName + '-prepare');
   addClass(element, namespace + '-' + animationName);
@@ -552,6 +566,10 @@ function _removeAnimationClasses(_ref7) {
   });
 }
 
+/**
+ * Adds the stagger classes measure the stagger duration and removes
+ * the classes again.
+ */
 function _getStaggering(_ref8) {
   var element = _ref8.element;
   var animationIndex = _ref8.animationIndex;
@@ -559,9 +577,13 @@ function _getStaggering(_ref8) {
   var namespace = _ref8.namespace;
 
   var delayWithoutStagger = getTransitionDelay(element);
+  addClass(element, namespace + '-stagger');
   addClass(element, namespace + '-' + animationName + '-stagger');
   var delayWithStagger = getTransitionDelay(element);
+  removeClass(element, namespace + '-stagger');
   removeClass(element, namespace + '-' + animationName + '-stagger');
+  // If there is no difference with or without the stagger class
+  // asume that there is no staggering
   return delayWithoutStagger === delayWithStagger ? 0 : delayWithStagger * animationIndex;
 }
 
@@ -626,6 +648,16 @@ function animorph(element, _ref) {
   }));
 }
 
+/**
+ * Inserts the given element as last child to the given target.
+ * If the element was in the dom before it is animated
+ * from the old position to the new position.
+ *
+ * @jsfiddle https://jsfiddle.net/aoz5y2n7/3/embedded/
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 function appendTo(element, target) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -634,6 +666,15 @@ function appendTo(element, target) {
   }, options));
 }
 
+/**
+ * Inserts the given element as first child to the given target.
+ * If the element was in the dom before it is animated
+ * from the old position to the new position.
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 function prependTo(element, target) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -643,6 +684,14 @@ function prependTo(element, target) {
   }, options));
 }
 
+/**
+ * Animate the given element and removes it from the dom after
+ * the animation is complete
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 function remove(element) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -651,6 +700,60 @@ function remove(element) {
   }, options));
 }
 
+/**
+ * Adds classes for an enter animation
+ *
+ * Flow:
+ *
+ * 1. Changes the classes (without animation)
+ *    + Add: `${namespace}-enter-prepare`
+ *    + Add: `${namespace}-enter`
+ *    + Add: `${namespace}-animate`
+ * 2. Changes the classes (with animation)
+ *    + Add: `${namespace}-enter-active`
+ *    + Remove: `${namespace}-enter-prepare`
+ * 4. Waits for the animation to end
+ * 5. Changes the classes (without animation)
+ *    + Remove: `${namespace}-enter-active`
+ *    + Remove: `${namespace}-enter`
+ *    + Remove: `${namespace}-animate`
+ * 6. Fullfills the promise
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
+function enter(element) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  return animorph(element, _extends({
+    operation: 'enter'
+  }, options));
+}
+
+/**
+ * Adds classes for a leave animation
+ *
+ * Flow:
+ *
+ * 1. Changes the classes (without animation)
+ *    + Add: `${namespace}-leave-prepare`
+ *    + Add: `${namespace}-leave`
+ *    + Add: `${namespace}-animate`
+ * 2. Changes the classes (with animation)
+ *    + Add: `${namespace}-leave-active`
+ *    + Remove: `${namespace}-leave-prepare`
+ * 4. Waits for the animation to end
+ * 5. Changes the classes (without animation)
+ *    + Remove: `${namespace}-leave-active`
+ *    + Remove: `${namespace}-leave`
+ *    + Remove: `${namespace}-animate`
+ * 6. Fullfills the promise
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
 function leave(element) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -659,7 +762,16 @@ function leave(element) {
   }, options));
 }
 
-function insertAfter(element, target) {
+/**
+ * Inserts the given element to the dom after the given target.
+ * If the element was in the dom before it is animated
+ * from the old position to the new position.
+ *
+ * @param  {HTMLElement} element   The element to animate
+ * @param  {Object} [options]      Animorph options like namespace @see animorph
+ * @return {Promise}               Promise of the animation
+ */
+function insertAfter$$1(element, target) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   return animorph(element, _extends({
@@ -669,13 +781,31 @@ function insertAfter(element, target) {
 }
 
 /**
- * Allows to animate from one set of classes to another
+ * Adds and removes css-classes from the given element.
+ *
+ * Flow:
+ *
+ * 1. Changes the classes (without animation)
+ *    + Add: `${namespace}-${transitionName}-prepare`
+ *    + Add: `${namespace}-${transitionName}`
+ *    + Add: `${namespace}-animate`
+ * 2. Changes the classes (with animation)
+ *    + Add: `${namespace}-${transitionName}-active`
+ *    + Add: custom class names (optional)
+ *    + Remove: `${namespace}-${transitionName}-prepare`
+ *    + Remove: custom class names (optional)
+ * 4. Waits for the animation to end
+ * 5. Changes the classes (without animation)
+ *    + Remove: `${namespace}-${transitionName}-active`
+ *    + Remove: `${namespace}-${transitionName}`
+ *    + Remove: `${namespace}-animate`
+ * 6. Fullfills the promise
  *
  * @param  {HTMLElement} element        The element to animate
- * @param  {String[]} classNamesBefore  Class names before
- * @param  {String[]} classNamesAfter   Class names after
- * @param  {String} [transitionName]     Transition name (enter or leave)
- * @param  {Object} [options={}]        Animorph options like namespace
+ * @param  {String[]} classNamesBefore  Custom classes to be removed
+ * @param  {String[]} classNamesAfter   Custom classes to be added
+ * @param  {String} ["enter"|"leave"]   Transition name: "enter"|"leave"
+ * @param  {Object} [options]           Animorph options like namespace @see animorph
  * @return {Promise}                    Promise of the animation
  */
 function replaceClasses(element, classNamesBefore, classNamesAfter) {
@@ -689,26 +819,71 @@ function replaceClasses(element, classNamesBefore, classNamesAfter) {
   }, options));
 }
 
+/**
+ * Append the current element to the target
+ * This will start a move animation if the current element is already in the dom.
+ *
+ * @param  {JQuery|HTMLElement|String} target
+ * @param  {object} options animorph options like namespace
+ * @return {Promise}        Animation Promise
+ */
 $.fn.amAppendTo = function (target, options) {
   return appendTo(this.toArray(), $(target)[0], options);
 };
 
+/**
+ * Prepend the current element to the target
+ * This will start a move animation if the current element is already in the dom.
+ *
+ * @param  {JQuery|HTMLElement|String} target
+ * @param  {object} options animorph options like namespace
+ * @return {Promise}        Animation Promise
+ */
 $.fn.amPrependTo = function (target, options) {
   return prependTo(this.toArray(), $(target)[0], options);
 };
 
+/**
+ * Run a leave animation and remove the current element from the dom after it finished
+ *
+ * @param  {object} options animorph options like namespace
+ * @return {Promise}        Animation Promise
+ */
 $.fn.amRemove = function (options) {
   return remove(this.toArray(), options);
 };
 
+/**
+ * Run a leave animation and remove the current element from the dom after it finished
+ *
+ * @param  {object} options animorph options like namespace
+ * @return {Promise}        Animation Promise
+ */
 $.fn.amLeave = function (options) {
   return leave(this.toArray(), options);
 };
 
+/**
+ * Inserts the current element after the target
+ * This will start a move animation if the current element is already in the dom.
+ *
+ * @param  {JQuery|HTMLElement|String} target
+ * @param  {object}     options animorph options like namespace
+ * @return {Promise}    Animation Promise
+ */
 $.fn.amInsertAfter = function (target, options) {
-  return insertAfter(this.toArray(), $(target)[0], options);
+  return insertAfter$$1(this.toArray(), $(target)[0], options);
 };
 
+/**
+ * Adds and removes css-classes from the given element.
+ *
+ * @param  {String|String[]} classNamesBefore class names to remove
+ * @param  {String|String[]} classNamesAfter  class names to add
+ * @param  {String}  Transition name `"enter"|"leave"`
+ * @param  {object} options animorph options like namespace
+ * @return {Promise}    Animation Promise
+ */
 $.fn.amReplaceClasses = function (classNamesBefore, classNamesAfter, transitionName, options) {
   return replaceClasses(this.toArray(), classNamesBefore, classNamesAfter, transitionName, options);
 };
@@ -717,8 +892,9 @@ exports.animorph = animorph;
 exports.appendTo = appendTo;
 exports.prependTo = prependTo;
 exports.remove = remove;
+exports.enter = enter;
 exports.leave = leave;
-exports.insertAfter = insertAfter;
+exports.insertAfter = insertAfter$$1;
 exports.replaceClasses = replaceClasses;
 
 Object.defineProperty(exports, '__esModule', { value: true });

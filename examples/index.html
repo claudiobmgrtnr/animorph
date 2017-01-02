@@ -43,7 +43,7 @@
   document.querySelector(".left").addEventListener("click",function(e) {
     // e.target was the clicked element
     if (e.target && e.target.matches("li.js-element")) {
-      animorph.appendTo(document.querySelector(".left li"), document.querySelector('.right'), {
+      animorph.appendTo(e.target, document.querySelector('.right'), {
         addClasses: ['element--green'],
         removeClasses: ['element--golden']
       });
@@ -55,8 +55,6 @@
       animorph.prependTo(e.target, document.querySelector('.left'), {
         addClasses: ['element--golden'],
         removeClasses: ['element--green']
-      }).then (function() {
-        console.log('done :) ');
       });
     }
   });

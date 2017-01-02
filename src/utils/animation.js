@@ -9,7 +9,8 @@ import {
   enableTransitions,
   disableTransitions,
   getTransitionDelay,
-  forceReflow
+  forceReflow,
+  insertAfter
 } from './dom-manipulation';
 
 /**
@@ -226,7 +227,7 @@ function animation ({
 
 function _createLeavePlaceholder (node) {
   const clone = cloneNode(node);
-  node.insertAdjacentElement('afterend', clone);
+  insertAfter(node, clone);
   return clone;
 }
 
