@@ -1,6 +1,6 @@
 {
   "name": "animorph",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Morph your dom with style",
   "main": "src/vanilla.js",
   "scripts": {

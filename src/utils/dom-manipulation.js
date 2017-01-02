@@ -257,9 +257,12 @@ export function isDomElement (node) {
  * @returns {Node}
  */
 export function insertAfter (referenceNode, newNode) {
-  /*
-  * If referenceNode is the last child within its parent element, that's fine, because referenceNode.nextSibling
-  * will be null and insertBefore handles that case by adding to the end of the parent
-  */
+  // For all modern browser and Firefox version 48 and higher
+  if (referenceNode.insertAdjacentElement) {
+    return referenceNode.insertAdjacentElement('afterend', newNode);
+  }
+  // For Firefox version 48 and lower
+  // If referenceNode is the last child within its parent element, that's fine, because referenceNode.nextSibling
+  // will be null and insertBefore handles that case by adding to the end of the parent
   return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
