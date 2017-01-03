@@ -215,7 +215,7 @@ function stringToMilliSeconds(timeString) {
     s: 1000,
     ms: 1
   };
-  var parsedTime = /([\d\.]+)\s*(\D+)/.exec(timeString);
+  var parsedTime = /([.\d]+)\s*(\D+)/.exec(timeString);
   return parsedTime ? parseFloat(parsedTime[1], 10) * timeUnits[parsedTime[2]] : 0;
 }
 

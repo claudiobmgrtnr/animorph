@@ -203,7 +203,7 @@ function stringToMilliSeconds (timeString) {
     s: 1000,
     ms: 1
   };
-  const parsedTime = /([\d\.]+)\s*(\D+)/.exec(timeString);
+  const parsedTime = /([.\d]+)\s*(\D+)/.exec(timeString);
   return parsedTime ? parseFloat(parsedTime[1], 10) * timeUnits[parsedTime[2]] : 0;
 }
 
