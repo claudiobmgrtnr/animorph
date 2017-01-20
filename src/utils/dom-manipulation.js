@@ -117,9 +117,12 @@ export function getElementPosition (node) {
  * @return {Promise}
  */
 export function waitUntilTransitionEnd (node) {
-  const duration = getTransitionDuration(node) + getTransitionDelay(node);
+  const durations = getTransitionDuration(node);
+  const delays = getTransitionDelay(node);
+  const entireAnimationTimes = durations.map((duration, i) => duration + delays[i]);
+  const longestDuration = Math.max(...entireAnimationTimes);
   return new Promise((resolve) => {
-    setTimeout(() => resolve(node), duration);
+    setTimeout(() => resolve(node), longestDuration);
   });
 }
 
@@ -129,7 +132,7 @@ export function waitUntilTransitionEnd (node) {
  * @param  {HTMLElement} element The element
  * @return {String[]} Classes
  */
-function getClassNames (element) {
+export function getClassNames (element) {
   const className = element.getAttribute && element.getAttribute('class') || '';
   return className === '' ? [] : className.split(' ');
 }
@@ -210,19 +213,23 @@ function stringToMilliSeconds (timeString) {
 /**
  * Returns the duration of an elements transition
  * @param  {HTMLElement} node The element to measure
- * @return {Number} time in milliseconds
+ * @return {Number[]} time in milliseconds
  */
-export function getTransitionDuration (node) {
-  return stringToMilliSeconds(window.getComputedStyle(node).transitionDuration);
+function getTransitionDuration (node) {
+  return (window.getComputedStyle(node).transitionDuration || '')
+    .split(',')
+    .map((delay) => stringToMilliSeconds(delay));
 }
 
 /**
  * Returns the delay of an elements transition
  * @param  {HTMLElement} node The element to measure
- * @return {Number} time in milliseconds
+ * @return {Number[]} time in milliseconds
  */
 export function getTransitionDelay (node) {
-  return stringToMilliSeconds(window.getComputedStyle(node).transitionDelay);
+  return (window.getComputedStyle(node).transitionDelay || '')
+    .split(',')
+    .map((delay) => stringToMilliSeconds(delay));
 }
 
 /**

@@ -1,6 +1,7 @@
 import {
   addClass,
   removeClass,
+  getClassNames,
   getElementPosition,
   detachNode,
   attachNode,
@@ -261,7 +262,7 @@ function _startAnimation ({
   animationIndex,
   animationName = 'enter'
 }) {
-  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggering({element, animationIndex, animationName, namespace});
+  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({element, animationIndex, animationName, namespace});
   disableTransitions(element);
   addClass(element, `${namespace}-${animationName}-prepare`);
   addClass(element, `${namespace}-${animationName}`);
@@ -293,7 +294,7 @@ function _removeAnimationClasses ({element, animationName, namespace}) {
  * Adds the stagger classes measure the stagger duration and removes
  * the classes again.
  */
-function _getStaggering ({element, animationIndex, animationName, namespace}) {
+function _getStaggering ({element, animationName, namespace}) {
   const delayWithoutStagger = getTransitionDelay(element);
   addClass(element, `${namespace}-stagger`);
   addClass(element, `${namespace}-${animationName}-stagger`);
@@ -302,5 +303,20 @@ function _getStaggering ({element, animationIndex, animationName, namespace}) {
   removeClass(element, `${namespace}-${animationName}-stagger`);
   // If there is no difference with or without the stagger class
   // asume that there is no staggering
-  return delayWithoutStagger === delayWithStagger ? 0 : delayWithStagger * animationIndex;
+  return delayWithoutStagger[0] === delayWithStagger[0] ? 0 : delayWithStagger[0];
+}
+
+const staggeringCache = {};
+/**
+ * Returns the staggering duration from cache
+ * The value is calculated if no duration is cache
+ */
+function _getStaggeringFromCache ({element, animationIndex, animationName, namespace}) {
+  const classNames = getClassNames(element);
+  classNames.sort();
+  const key = classNames.join(' ');
+  if (!staggeringCache[key]) {
+    staggeringCache[key] = _getStaggering({element, animationIndex, animationName, namespace});
+  }
+  return staggeringCache[key] * animationIndex;
 }

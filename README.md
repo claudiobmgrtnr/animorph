@@ -7,7 +7,7 @@ Animorph
 Morph your dom with style.  
 Animorph.js is a small javascript framework that helps you to move any kind of elements inside of your dom.
 
-* Lighweight (below 2kb gziped)
+* Lighweight (below 2.5kb gzipped)
 * Chrome, Firefox, IE 9+, Safari
 * Zero dependencies
 * jQuery bindings (optional)

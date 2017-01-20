@@ -8,6 +8,8 @@ $ = 'default' in $ ? $['default'] : $;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 /**
  * Removes the given element from it's parent
  *
@@ -127,11 +129,16 @@ function getElementPosition(node) {
  * @return {Promise}
  */
 function waitUntilTransitionEnd(node) {
-  var duration = getTransitionDuration(node) + getTransitionDelay(node);
+  var durations = getTransitionDuration(node);
+  var delays = getTransitionDelay(node);
+  var entireAnimationTimes = durations.map(function (duration, i) {
+    return duration + delays[i];
+  });
+  var longestDuration = Math.max.apply(Math, _toConsumableArray(entireAnimationTimes));
   return new Promise(function (resolve) {
     setTimeout(function () {
       return resolve(node);
-    }, duration);
+    }, longestDuration);
   });
 }
 
@@ -222,19 +229,23 @@ function stringToMilliSeconds(timeString) {
 /**
  * Returns the duration of an elements transition
  * @param  {HTMLElement} node The element to measure
- * @return {Number} time in milliseconds
+ * @return {Number[]} time in milliseconds
  */
 function getTransitionDuration(node) {
-  return stringToMilliSeconds(window.getComputedStyle(node).transitionDuration);
+  return (window.getComputedStyle(node).transitionDuration || '').split(',').map(function (delay) {
+    return stringToMilliSeconds(delay);
+  });
 }
 
 /**
  * Returns the delay of an elements transition
  * @param  {HTMLElement} node The element to measure
- * @return {Number} time in milliseconds
+ * @return {Number[]} time in milliseconds
  */
 function getTransitionDelay(node) {
-  return stringToMilliSeconds(window.getComputedStyle(node).transitionDelay);
+  return (window.getComputedStyle(node).transitionDelay || '').split(',').map(function (delay) {
+    return stringToMilliSeconds(delay);
+  });
 }
 
 /**
@@ -532,7 +543,7 @@ function _startAnimation(_ref6) {
   var _ref6$animationName = _ref6.animationName;
   var animationName = _ref6$animationName === undefined ? 'enter' : _ref6$animationName;
 
-  var staggeringDuration = animationIndex === 0 ? 0 : _getStaggering({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
+  var staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
   disableTransitions(element);
   addClass(element, namespace + '-' + animationName + '-prepare');
   addClass(element, namespace + '-' + animationName);
@@ -575,7 +586,6 @@ function _removeAnimationClasses(_ref7) {
  */
 function _getStaggering(_ref8) {
   var element = _ref8.element;
-  var animationIndex = _ref8.animationIndex;
   var animationName = _ref8.animationName;
   var namespace = _ref8.namespace;
 
@@ -587,7 +597,27 @@ function _getStaggering(_ref8) {
   removeClass(element, namespace + '-' + animationName + '-stagger');
   // If there is no difference with or without the stagger class
   // asume that there is no staggering
-  return delayWithoutStagger === delayWithStagger ? 0 : delayWithStagger * animationIndex;
+  return delayWithoutStagger[0] === delayWithStagger[0] ? 0 : delayWithStagger[0];
+}
+
+var staggeringCache = {};
+/**
+ * Returns the staggering duration from cache
+ * The value is calculated if no duration is cache
+ */
+function _getStaggeringFromCache(_ref9) {
+  var element = _ref9.element;
+  var animationIndex = _ref9.animationIndex;
+  var animationName = _ref9.animationName;
+  var namespace = _ref9.namespace;
+
+  var classNames = getClassNames(element);
+  classNames.sort();
+  var key = classNames.join(' ');
+  if (!staggeringCache[key]) {
+    staggeringCache[key] = _getStaggering({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
+  }
+  return staggeringCache[key] * animationIndex;
 }
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
