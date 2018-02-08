@@ -30,6 +30,7 @@ export function enterAnimation ({
   addClasses,
   removeClasses,
   element,
+  elementsCount,
   target,
   operation,
   animationIndex
@@ -40,6 +41,7 @@ export function enterAnimation ({
   return animation({
     namespace,
     element,
+    elementsCount,
     addClasses,
     removeClasses,
     animationIndex,
@@ -59,6 +61,7 @@ export function enterAnimation ({
 export function leaveAnimation ({
   namespace,
   element,
+  elementsCount,
   addClasses,
   removeClasses,
   animationIndex
@@ -66,6 +69,7 @@ export function leaveAnimation ({
   return animation({
     namespace,
     element,
+    elementsCount,
     addClasses,
     removeClasses,
     animationIndex,
@@ -90,6 +94,7 @@ export function morphAnimation ({
   addClasses,
   removeClasses,
   element,
+  elementsCount,
   target,
   operation,
   morphParent,
@@ -111,6 +116,7 @@ export function morphAnimation ({
       addClasses: [],
       removeClasses: [],
       element,
+      elementsCount,
       target,
       operation,
       animationIndex
@@ -120,6 +126,7 @@ export function morphAnimation ({
       addClasses,
       removeClasses,
       element: movePlaceholder,
+      elementsCount,
       morphParent,
       target: element,
       animationIndex
@@ -129,6 +136,7 @@ export function morphAnimation ({
       addClasses: [],
       removeClasses: [],
       element: leavePlaceholder,
+      elementsCount,
       animationIndex
     })
   ]).then(() => {
@@ -163,6 +171,7 @@ function moveAnimation ({
   addClasses,
   removeClasses,
   element,
+  elementsCount,
   target,
   morphParent,
   animationIndex
@@ -177,6 +186,7 @@ function moveAnimation ({
   return animation({
     namespace,
     element,
+    elementsCount,
     addClasses,
     removeClasses,
     animationIndex,
@@ -205,6 +215,7 @@ function animation ({
   addClasses,
   removeClasses,
   element,
+  elementsCount,
   animationName,
   animationIndex,
   onAnimationStart = () => {}
@@ -212,6 +223,7 @@ function animation ({
   return _startAnimation({
     namespace,
     element,
+    elementsCount,
     addClasses,
     removeClasses,
     animationName,
@@ -257,12 +269,14 @@ function _createMovePlaceholder (node, morphParent) {
 function _startAnimation ({
   namespace,
   element,
+  elementsCount,
   addClasses,
   removeClasses,
   animationIndex,
   animationName = 'enter'
 }) {
-  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({element, animationIndex, animationName, namespace});
+  const cacheKey = _composeCacheKey(element);
+  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({element, animationIndex, animationName, namespace}, cacheKey);
   disableTransitions(element);
   addClass(element, `${namespace}-${animationName}-prepare`);
   addClass(element, `${namespace}-${animationName}`);
@@ -271,12 +285,27 @@ function _startAnimation ({
     setTimeout(resolve, staggeringDuration);
   }).then(() => forceReflow(element).then(() => {
     forceReflow(element);
+    // clear cache for animation-group when last element of this group finished
+    if (elementsCount === animationIndex + 1) {
+      delete staggeringCache[cacheKey];
+    }
     removeClass(element, `${namespace}-${animationName}-prepare`);
     addClass(element, `${namespace}-${animationName}-active`);
     addClasses.forEach((className) => addClass(element, className));
     removeClasses.forEach((className) => removeClass(element, className));
     enableTransitions(element);
   }));
+}
+
+/**
+ * Returns a cache-key based on the class-names
+ * @param {HTMLElement} node The HTML-node to receive the classes from
+ * @return {string} The key composed of the class-names of the node
+ */
+function _composeCacheKey (node) {
+  var classNames = getClassNames(node);
+  classNames.sort();
+  return classNames.join(' ');
 }
 
 function _removeAnimationClasses ({element, animationName, namespace}) {
@@ -311,12 +340,9 @@ const staggeringCache = {};
  * Returns the staggering duration from cache
  * The value is calculated if no duration is cache
  */
-function _getStaggeringFromCache ({element, animationIndex, animationName, namespace}) {
-  const classNames = getClassNames(element);
-  classNames.sort();
-  const key = classNames.join(' ');
-  if (!staggeringCache[key]) {
-    staggeringCache[key] = _getStaggering({element, animationIndex, animationName, namespace});
+function _getStaggeringFromCache ({element, animationIndex, animationName, namespace}, cacheKey) {
+  if (!staggeringCache[cacheKey]) {
+    staggeringCache[cacheKey] = _getStaggering({element, animationIndex, animationName, namespace});
   }
-  return staggeringCache[key] * animationIndex;
+  return staggeringCache[cacheKey] * animationIndex;
 }
