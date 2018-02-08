@@ -302,13 +302,14 @@ function insertAfter$1(referenceNode, newNode) {
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function enterAnimation(_ref) {
-  var namespace = _ref.namespace;
-  var addClasses = _ref.addClasses;
-  var removeClasses = _ref.removeClasses;
-  var element = _ref.element;
-  var target = _ref.target;
-  var operation = _ref.operation;
-  var animationIndex = _ref.animationIndex;
+  var namespace = _ref.namespace,
+      addClasses = _ref.addClasses,
+      removeClasses = _ref.removeClasses,
+      element = _ref.element,
+      elementsCount = _ref.elementsCount,
+      target = _ref.target,
+      operation = _ref.operation,
+      animationIndex = _ref.animationIndex;
 
   if (target) {
     attachNode(element, target, operation);
@@ -316,6 +317,7 @@ function enterAnimation(_ref) {
   return animation({
     namespace: namespace,
     element: element,
+    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationIndex: animationIndex,
@@ -333,15 +335,17 @@ function enterAnimation(_ref) {
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function leaveAnimation(_ref2) {
-  var namespace = _ref2.namespace;
-  var element = _ref2.element;
-  var addClasses = _ref2.addClasses;
-  var removeClasses = _ref2.removeClasses;
-  var animationIndex = _ref2.animationIndex;
+  var namespace = _ref2.namespace,
+      element = _ref2.element,
+      elementsCount = _ref2.elementsCount,
+      addClasses = _ref2.addClasses,
+      removeClasses = _ref2.removeClasses,
+      animationIndex = _ref2.animationIndex;
 
   return animation({
     namespace: namespace,
     element: element,
+    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationIndex: animationIndex,
@@ -362,14 +366,15 @@ function leaveAnimation(_ref2) {
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function morphAnimation(_ref3) {
-  var namespace = _ref3.namespace;
-  var addClasses = _ref3.addClasses;
-  var removeClasses = _ref3.removeClasses;
-  var element = _ref3.element;
-  var target = _ref3.target;
-  var operation = _ref3.operation;
-  var morphParent = _ref3.morphParent;
-  var animationIndex = _ref3.animationIndex;
+  var namespace = _ref3.namespace,
+      addClasses = _ref3.addClasses,
+      removeClasses = _ref3.removeClasses,
+      element = _ref3.element,
+      elementsCount = _ref3.elementsCount,
+      target = _ref3.target,
+      operation = _ref3.operation,
+      morphParent = _ref3.morphParent,
+      animationIndex = _ref3.animationIndex;
 
   if (element instanceof window.HTMLElement === false) {
     throw new Error('target is required');
@@ -390,6 +395,7 @@ function morphAnimation(_ref3) {
     addClasses: [],
     removeClasses: [],
     element: element,
+    elementsCount: elementsCount,
     target: target,
     operation: operation,
     animationIndex: animationIndex
@@ -398,6 +404,7 @@ function morphAnimation(_ref3) {
     addClasses: addClasses,
     removeClasses: removeClasses,
     element: movePlaceholder,
+    elementsCount: elementsCount,
     morphParent: morphParent,
     target: element,
     animationIndex: animationIndex
@@ -406,6 +413,7 @@ function morphAnimation(_ref3) {
     addClasses: [],
     removeClasses: [],
     element: leavePlaceholder,
+    elementsCount: elementsCount,
     animationIndex: animationIndex
   })]).then(function () {
     detachNode(movePlaceholder);
@@ -437,13 +445,14 @@ function removeAnimation(options) {
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function moveAnimation(_ref4) {
-  var namespace = _ref4.namespace;
-  var addClasses = _ref4.addClasses;
-  var removeClasses = _ref4.removeClasses;
-  var element = _ref4.element;
-  var target = _ref4.target;
-  var morphParent = _ref4.morphParent;
-  var animationIndex = _ref4.animationIndex;
+  var namespace = _ref4.namespace,
+      addClasses = _ref4.addClasses,
+      removeClasses = _ref4.removeClasses,
+      element = _ref4.element,
+      elementsCount = _ref4.elementsCount,
+      target = _ref4.target,
+      morphParent = _ref4.morphParent,
+      animationIndex = _ref4.animationIndex;
 
   var targetPosition = getElementPosition(target);
   var parentPosition = getElementPosition(morphParent);
@@ -455,6 +464,7 @@ function moveAnimation(_ref4) {
   return animation({
     namespace: namespace,
     element: element,
+    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationIndex: animationIndex,
@@ -479,18 +489,20 @@ function moveAnimation(_ref4) {
  * @return {Promise} A promise which will be resolved once the animation is complete
  */
 function animation(_ref5) {
-  var namespace = _ref5.namespace;
-  var addClasses = _ref5.addClasses;
-  var removeClasses = _ref5.removeClasses;
-  var element = _ref5.element;
-  var animationName = _ref5.animationName;
-  var animationIndex = _ref5.animationIndex;
-  var _ref5$onAnimationStar = _ref5.onAnimationStart;
-  var onAnimationStart = _ref5$onAnimationStar === undefined ? function () {} : _ref5$onAnimationStar;
+  var namespace = _ref5.namespace,
+      addClasses = _ref5.addClasses,
+      removeClasses = _ref5.removeClasses,
+      element = _ref5.element,
+      elementsCount = _ref5.elementsCount,
+      animationName = _ref5.animationName,
+      animationIndex = _ref5.animationIndex,
+      _ref5$onAnimationStar = _ref5.onAnimationStart,
+      onAnimationStart = _ref5$onAnimationStar === undefined ? function () {} : _ref5$onAnimationStar;
 
   return _startAnimation({
     namespace: namespace,
     element: element,
+    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationName: animationName,
@@ -535,15 +547,17 @@ function _createMovePlaceholder(node, morphParent) {
 }
 
 function _startAnimation(_ref6) {
-  var namespace = _ref6.namespace;
-  var element = _ref6.element;
-  var addClasses = _ref6.addClasses;
-  var removeClasses = _ref6.removeClasses;
-  var animationIndex = _ref6.animationIndex;
-  var _ref6$animationName = _ref6.animationName;
-  var animationName = _ref6$animationName === undefined ? 'enter' : _ref6$animationName;
+  var namespace = _ref6.namespace,
+      element = _ref6.element,
+      elementsCount = _ref6.elementsCount,
+      addClasses = _ref6.addClasses,
+      removeClasses = _ref6.removeClasses,
+      animationIndex = _ref6.animationIndex,
+      _ref6$animationName = _ref6.animationName,
+      animationName = _ref6$animationName === undefined ? 'enter' : _ref6$animationName;
 
-  var staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
+  var cacheKey = _composeCacheKey(element);
+  var staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace }, cacheKey);
   disableTransitions(element);
   addClass(element, namespace + '-' + animationName + '-prepare');
   addClass(element, namespace + '-' + animationName);
@@ -553,6 +567,10 @@ function _startAnimation(_ref6) {
   }).then(function () {
     return forceReflow(element).then(function () {
       forceReflow(element);
+      // clear cache for animation-group when last element of this group finished
+      if (elementsCount === animationIndex + 1) {
+        delete staggeringCache[cacheKey];
+      }
       removeClass(element, namespace + '-' + animationName + '-prepare');
       addClass(element, namespace + '-' + animationName + '-active');
       addClasses.forEach(function (className) {
@@ -566,10 +584,21 @@ function _startAnimation(_ref6) {
   });
 }
 
+/**
+ * Returns a cache-key based on the class-names
+ * @param {HTMLElement} node The HTML-node to receive the classes from
+ * @return {string} The key composed of the class-names of the node
+ */
+function _composeCacheKey(node) {
+  var classNames = getClassNames(node);
+  classNames.sort();
+  return classNames.join(' ');
+}
+
 function _removeAnimationClasses(_ref7) {
-  var element = _ref7.element;
-  var animationName = _ref7.animationName;
-  var namespace = _ref7.namespace;
+  var element = _ref7.element,
+      animationName = _ref7.animationName,
+      namespace = _ref7.namespace;
 
   disableTransitions(element);
   return forceReflow(element).then(function () {
@@ -585,9 +614,9 @@ function _removeAnimationClasses(_ref7) {
  * the classes again.
  */
 function _getStaggering(_ref8) {
-  var element = _ref8.element;
-  var animationName = _ref8.animationName;
-  var namespace = _ref8.namespace;
+  var element = _ref8.element,
+      animationName = _ref8.animationName,
+      namespace = _ref8.namespace;
 
   var delayWithoutStagger = getTransitionDelay(element);
   addClass(element, namespace + '-stagger');
@@ -605,19 +634,16 @@ var staggeringCache = {};
  * Returns the staggering duration from cache
  * The value is calculated if no duration is cache
  */
-function _getStaggeringFromCache(_ref9) {
-  var element = _ref9.element;
-  var animationIndex = _ref9.animationIndex;
-  var animationName = _ref9.animationName;
-  var namespace = _ref9.namespace;
+function _getStaggeringFromCache(_ref9, cacheKey) {
+  var element = _ref9.element,
+      animationIndex = _ref9.animationIndex,
+      animationName = _ref9.animationName,
+      namespace = _ref9.namespace;
 
-  var classNames = getClassNames(element);
-  classNames.sort();
-  var key = classNames.join(' ');
-  if (!staggeringCache[key]) {
-    staggeringCache[key] = _getStaggering({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
+  if (!staggeringCache[cacheKey]) {
+    staggeringCache[cacheKey] = _getStaggering({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace });
   }
-  return staggeringCache[key] * animationIndex;
+  return staggeringCache[cacheKey] * animationIndex;
 }
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -634,17 +660,17 @@ var operations = {
 };
 
 function animorph(element, _ref) {
-  var _ref$namespace = _ref.namespace;
-  var namespace = _ref$namespace === undefined ? 'am' : _ref$namespace;
-  var _ref$addClasses = _ref.addClasses;
-  var addClasses = _ref$addClasses === undefined ? [] : _ref$addClasses;
-  var _ref$removeClasses = _ref.removeClasses;
-  var removeClasses = _ref$removeClasses === undefined ? [] : _ref$removeClasses;
-  var target = _ref.target;
-  var _ref$operation = _ref.operation;
-  var operation = _ref$operation === undefined ? 'appendTo' : _ref$operation;
-  var _ref$morphParent = _ref.morphParent;
-  var morphParent = _ref$morphParent === undefined ? document.body : _ref$morphParent;
+  var _ref$namespace = _ref.namespace,
+      namespace = _ref$namespace === undefined ? 'am' : _ref$namespace,
+      _ref$addClasses = _ref.addClasses,
+      addClasses = _ref$addClasses === undefined ? [] : _ref$addClasses,
+      _ref$removeClasses = _ref.removeClasses,
+      removeClasses = _ref$removeClasses === undefined ? [] : _ref$removeClasses,
+      target = _ref.target,
+      _ref$operation = _ref.operation,
+      operation = _ref$operation === undefined ? 'appendTo' : _ref$operation,
+      _ref$morphParent = _ref.morphParent,
+      morphParent = _ref$morphParent === undefined ? document.body : _ref$morphParent;
 
   var animation = operations[operation];
   if (!animation) {
@@ -660,6 +686,7 @@ function animorph(element, _ref) {
   }
   // Turn element from a single element or a node list or an array to an array:
   var elements = isDomElement(element) ? [element] : Array.prototype.slice.call(element);
+  var elementsCount = elements.length;
   return Promise.all(elements.map(function (element, animationIndex) {
     if (!isDomElement(element)) {
       throw new Error('Element is required');
@@ -674,6 +701,7 @@ function animorph(element, _ref) {
       addClasses: addClasses,
       removeClasses: removeClasses,
       element: element,
+      elementsCount: elementsCount,
       target: target,
       operation: operation,
       morphParent: morphParent
