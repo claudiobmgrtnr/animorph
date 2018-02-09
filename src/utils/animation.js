@@ -275,12 +275,14 @@ function _startAnimation ({
   animationIndex,
   animationName = 'enter'
 }) {
-  const cacheKey = _composeCacheKey(element);
-  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({element, animationIndex, animationName, namespace}, cacheKey);
   disableTransitions(element);
   addClass(element, `${namespace}-${animationName}-prepare`);
   addClass(element, `${namespace}-${animationName}`);
   addClass(element, `${namespace}-animate`);
+
+  const cacheKey = _composeCacheKey(element);
+  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({element, animationIndex, animationName, namespace}, cacheKey);
+
   return new Promise((resolve) => {
     setTimeout(resolve, staggeringDuration);
   }).then(() => forceReflow(element).then(() => {
