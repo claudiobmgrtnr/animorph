@@ -306,7 +306,6 @@ function enterAnimation(_ref) {
       addClasses = _ref.addClasses,
       removeClasses = _ref.removeClasses,
       element = _ref.element,
-      elementsCount = _ref.elementsCount,
       target = _ref.target,
       operation = _ref.operation,
       animationIndex = _ref.animationIndex;
@@ -317,7 +316,6 @@ function enterAnimation(_ref) {
   return animation({
     namespace: namespace,
     element: element,
-    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationIndex: animationIndex,
@@ -337,7 +335,6 @@ function enterAnimation(_ref) {
 function leaveAnimation(_ref2) {
   var namespace = _ref2.namespace,
       element = _ref2.element,
-      elementsCount = _ref2.elementsCount,
       addClasses = _ref2.addClasses,
       removeClasses = _ref2.removeClasses,
       animationIndex = _ref2.animationIndex;
@@ -345,7 +342,6 @@ function leaveAnimation(_ref2) {
   return animation({
     namespace: namespace,
     element: element,
-    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationIndex: animationIndex,
@@ -370,7 +366,6 @@ function morphAnimation(_ref3) {
       addClasses = _ref3.addClasses,
       removeClasses = _ref3.removeClasses,
       element = _ref3.element,
-      elementsCount = _ref3.elementsCount,
       target = _ref3.target,
       operation = _ref3.operation,
       morphParent = _ref3.morphParent,
@@ -395,7 +390,6 @@ function morphAnimation(_ref3) {
     addClasses: [],
     removeClasses: [],
     element: element,
-    elementsCount: elementsCount,
     target: target,
     operation: operation,
     animationIndex: animationIndex
@@ -404,7 +398,6 @@ function morphAnimation(_ref3) {
     addClasses: addClasses,
     removeClasses: removeClasses,
     element: movePlaceholder,
-    elementsCount: elementsCount,
     morphParent: morphParent,
     target: element,
     animationIndex: animationIndex
@@ -413,7 +406,6 @@ function morphAnimation(_ref3) {
     addClasses: [],
     removeClasses: [],
     element: leavePlaceholder,
-    elementsCount: elementsCount,
     animationIndex: animationIndex
   })]).then(function () {
     detachNode(movePlaceholder);
@@ -449,7 +441,6 @@ function moveAnimation(_ref4) {
       addClasses = _ref4.addClasses,
       removeClasses = _ref4.removeClasses,
       element = _ref4.element,
-      elementsCount = _ref4.elementsCount,
       target = _ref4.target,
       morphParent = _ref4.morphParent,
       animationIndex = _ref4.animationIndex;
@@ -464,7 +455,6 @@ function moveAnimation(_ref4) {
   return animation({
     namespace: namespace,
     element: element,
-    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationIndex: animationIndex,
@@ -493,7 +483,6 @@ function animation(_ref5) {
       addClasses = _ref5.addClasses,
       removeClasses = _ref5.removeClasses,
       element = _ref5.element,
-      elementsCount = _ref5.elementsCount,
       animationName = _ref5.animationName,
       animationIndex = _ref5.animationIndex,
       _ref5$onAnimationStar = _ref5.onAnimationStart,
@@ -502,7 +491,6 @@ function animation(_ref5) {
   return _startAnimation({
     namespace: namespace,
     element: element,
-    elementsCount: elementsCount,
     addClasses: addClasses,
     removeClasses: removeClasses,
     animationName: animationName,
@@ -549,28 +537,25 @@ function _createMovePlaceholder(node, morphParent) {
 function _startAnimation(_ref6) {
   var namespace = _ref6.namespace,
       element = _ref6.element,
-      elementsCount = _ref6.elementsCount,
       addClasses = _ref6.addClasses,
       removeClasses = _ref6.removeClasses,
       animationIndex = _ref6.animationIndex,
       _ref6$animationName = _ref6.animationName,
       animationName = _ref6$animationName === undefined ? 'enter' : _ref6$animationName;
 
-  var cacheKey = _composeCacheKey(element);
+  var cacheKey = _composeCacheKey(element, namespace, animationName);
   var staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({ element: element, animationIndex: animationIndex, animationName: animationName, namespace: namespace }, cacheKey);
+
   disableTransitions(element);
   addClass(element, namespace + '-' + animationName + '-prepare');
   addClass(element, namespace + '-' + animationName);
   addClass(element, namespace + '-animate');
+
   return new Promise(function (resolve) {
     setTimeout(resolve, staggeringDuration);
   }).then(function () {
     return forceReflow(element).then(function () {
       forceReflow(element);
-      // clear cache for animation-group when last element of this group finished
-      if (elementsCount === animationIndex + 1) {
-        delete staggeringCache[cacheKey];
-      }
       removeClass(element, namespace + '-' + animationName + '-prepare');
       addClass(element, namespace + '-' + animationName + '-active');
       addClasses.forEach(function (className) {
@@ -587,10 +572,13 @@ function _startAnimation(_ref6) {
 /**
  * Returns a cache-key based on the class-names
  * @param {HTMLElement} node The HTML-node to receive the classes from
+ * @param {string} namespace The namespace on which to append the animationName
+ * @param {string} animationName The name of the animation (e.g. enter / leave)
  * @return {string} The key composed of the class-names of the node
  */
-function _composeCacheKey(node) {
+function _composeCacheKey(node, namespace, animationName) {
   var classNames = getClassNames(node);
+  classNames.push(namespace + '-' + animationName);
   classNames.sort();
   return classNames.join(' ');
 }
@@ -686,7 +674,6 @@ function animorph(element, _ref) {
   }
   // Turn element from a single element or a node list or an array to an array:
   var elements = isDomElement(element) ? [element] : Array.prototype.slice.call(element);
-  var elementsCount = elements.length;
   return Promise.all(elements.map(function (element, animationIndex) {
     if (!isDomElement(element)) {
       throw new Error('Element is required');
@@ -701,7 +688,6 @@ function animorph(element, _ref) {
       addClasses: addClasses,
       removeClasses: removeClasses,
       element: element,
-      elementsCount: elementsCount,
       target: target,
       operation: operation,
       morphParent: morphParent
