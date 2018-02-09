@@ -275,22 +275,18 @@ function _startAnimation ({
   animationIndex,
   animationName = 'enter'
 }) {
+  const cacheKey = _composeCacheKey(element, namespace, animationName);
+  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({element, animationIndex, animationName, namespace}, cacheKey);
+
   disableTransitions(element);
   addClass(element, `${namespace}-${animationName}-prepare`);
   addClass(element, `${namespace}-${animationName}`);
   addClass(element, `${namespace}-animate`);
 
-  const cacheKey = _composeCacheKey(element);
-  const staggeringDuration = animationIndex === 0 ? 0 : _getStaggeringFromCache({element, animationIndex, animationName, namespace}, cacheKey);
-
   return new Promise((resolve) => {
     setTimeout(resolve, staggeringDuration);
   }).then(() => forceReflow(element).then(() => {
     forceReflow(element);
-    // clear cache for animation-group when last element of this group finished
-    if (elementsCount === animationIndex + 1) {
-      delete staggeringCache[cacheKey];
-    }
     removeClass(element, `${namespace}-${animationName}-prepare`);
     addClass(element, `${namespace}-${animationName}-active`);
     addClasses.forEach((className) => addClass(element, className));
@@ -304,8 +300,9 @@ function _startAnimation ({
  * @param {HTMLElement} node The HTML-node to receive the classes from
  * @return {string} The key composed of the class-names of the node
  */
-function _composeCacheKey (node) {
+function _composeCacheKey (node, namespace, animationName) {
   var classNames = getClassNames(node);
+  classNames.push(`${namespace}-${animationName}`);
   classNames.sort();
   return classNames.join(' ');
 }
