@@ -30,7 +30,6 @@ export function enterAnimation ({
   addClasses,
   removeClasses,
   element,
-  elementsCount,
   target,
   operation,
   animationIndex
@@ -41,7 +40,6 @@ export function enterAnimation ({
   return animation({
     namespace,
     element,
-    elementsCount,
     addClasses,
     removeClasses,
     animationIndex,
@@ -61,7 +59,6 @@ export function enterAnimation ({
 export function leaveAnimation ({
   namespace,
   element,
-  elementsCount,
   addClasses,
   removeClasses,
   animationIndex
@@ -69,7 +66,6 @@ export function leaveAnimation ({
   return animation({
     namespace,
     element,
-    elementsCount,
     addClasses,
     removeClasses,
     animationIndex,
@@ -94,7 +90,6 @@ export function morphAnimation ({
   addClasses,
   removeClasses,
   element,
-  elementsCount,
   target,
   operation,
   morphParent,
@@ -116,7 +111,6 @@ export function morphAnimation ({
       addClasses: [],
       removeClasses: [],
       element,
-      elementsCount,
       target,
       operation,
       animationIndex
@@ -126,7 +120,6 @@ export function morphAnimation ({
       addClasses,
       removeClasses,
       element: movePlaceholder,
-      elementsCount,
       morphParent,
       target: element,
       animationIndex
@@ -136,7 +129,6 @@ export function morphAnimation ({
       addClasses: [],
       removeClasses: [],
       element: leavePlaceholder,
-      elementsCount,
       animationIndex
     })
   ]).then(() => {
@@ -171,7 +163,6 @@ function moveAnimation ({
   addClasses,
   removeClasses,
   element,
-  elementsCount,
   target,
   morphParent,
   animationIndex
@@ -186,7 +177,6 @@ function moveAnimation ({
   return animation({
     namespace,
     element,
-    elementsCount,
     addClasses,
     removeClasses,
     animationIndex,
@@ -215,7 +205,6 @@ function animation ({
   addClasses,
   removeClasses,
   element,
-  elementsCount,
   animationName,
   animationIndex,
   onAnimationStart = () => {}
@@ -223,7 +212,6 @@ function animation ({
   return _startAnimation({
     namespace,
     element,
-    elementsCount,
     addClasses,
     removeClasses,
     animationName,
@@ -269,7 +257,6 @@ function _createMovePlaceholder (node, morphParent) {
 function _startAnimation ({
   namespace,
   element,
-  elementsCount,
   addClasses,
   removeClasses,
   animationIndex,
@@ -298,6 +285,8 @@ function _startAnimation ({
 /**
  * Returns a cache-key based on the class-names
  * @param {HTMLElement} node The HTML-node to receive the classes from
+ * @param {string} namespace The namespace on which to append the animationName
+ * @param {string} animationName The name of the animation (e.g. enter / leave)
  * @return {string} The key composed of the class-names of the node
  */
 function _composeCacheKey (node, namespace, animationName) {

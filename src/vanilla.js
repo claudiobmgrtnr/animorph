@@ -42,7 +42,6 @@ export function animorph (element, {
   }
   // Turn element from a single element or a node list or an array to an array:
   const elements = isDomElement(element) ? [element] : Array.prototype.slice.call(element);
-  const elementsCount = elements.length;
   return Promise.all(elements.map((element, animationIndex) => {
     if (!isDomElement(element)) {
       throw new Error('Element is required');
@@ -57,7 +56,6 @@ export function animorph (element, {
       addClasses,
       removeClasses,
       element,
-      elementsCount,
       target,
       operation,
       morphParent
